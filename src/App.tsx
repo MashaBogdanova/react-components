@@ -10,38 +10,51 @@ interface IState {
   prevUrl: string | null;
   nextUrl: string | null;
   currentPage: number;
+  wasPageLoaded: boolean;
 }
 
 class App extends Component<null, IState> {
   state = {
-    searchTerm: localStorage.getItem('searchTerm') ? localStorage.getItem('searchTerm') : '',
+    searchTerm: localStorage.getItem('searchTerm')
+      ? localStorage.getItem('searchTerm')
+      : '',
     searchResults: [],
-    prevUrl: localStorage.getItem('prevUrl') ? localStorage.getItem('prevUrl') : null,
-    nextUrl: localStorage.getItem('nextUrl') ? localStorage.getItem('nextUrl') : null,
-    currentPage: localStorage.getItem('currentPage') ? Number(localStorage.getItem('currentPage')) : 1,
+    prevUrl: localStorage.getItem('prevUrl')
+      ? localStorage.getItem('prevUrl')
+      : null,
+    nextUrl: localStorage.getItem('nextUrl')
+      ? localStorage.getItem('nextUrl')
+      : null,
+    currentPage: localStorage.getItem('currentPage')
+      ? Number(localStorage.getItem('currentPage'))
+      : 1,
+    wasPageLoaded: false,
   };
 
   fetchItems(searchTerm, currentPage) {
+    this.setState({ ...this.state, wasPageLoaded: false });
     fetch(
-        `https://swapi.dev/api/people?search=${searchTerm}&page=${currentPage}`
+      `https://swapi.dev/api/people?search=${searchTerm}&page=${currentPage}`
     )
-        .then((response) => response.json())
-        .then((data) => {
-          this.setState({
-            ...this.state,
-            searchResults: data.results,
-            prevUrl: data.previous,
-            nextUrl: data.next,
-            currentPage: currentPage
-          });
-          localStorage.setItem('searchTerm', searchTerm);
-          localStorage.setItem('prevUrl', data.previous);
-          localStorage.setItem('nextUrl', data.next);
-          localStorage.setItem('currentPage', currentPage.toString());
-        })
-        .catch((error) => {
-          console.error('Error fetching data:', error);
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({
+          ...this.state,
+          searchResults: data.results,
+          prevUrl: data.previous,
+          nextUrl: data.next,
+          currentPage: currentPage,
+          wasPageLoaded: true,
         });
+
+        localStorage.setItem('searchTerm', searchTerm);
+        localStorage.setItem('prevUrl', data.previous);
+        localStorage.setItem('nextUrl', data.next);
+        localStorage.setItem('currentPage', currentPage.toString());
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
   }
 
   componentDidMount() {
@@ -69,8 +82,11 @@ class App extends Component<null, IState> {
           handleInputChange={this.handleInputChange.bind(this)}
           handleSearch={this.handleSearch.bind(this)}
         />
-
-        <Items items={this.state.searchResults} />
+        {!this.state.wasPageLoaded ? (
+          <p>Loading...</p>
+        ) : (
+          <Items items={this.state.searchResults} />
+        )}
 
         <Pagination
           prevUrl={this.state.prevUrl}

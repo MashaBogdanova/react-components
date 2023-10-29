@@ -21,45 +21,35 @@ class App extends Component<null, IState> {
     currentPage: localStorage.getItem('currentPage') ? Number(localStorage.getItem('currentPage')) : 1,
   };
 
-  componentDidMount() {
+  fetchItems(searchTerm, currentPage) {
     fetch(
-      `https://swapi.dev/api/people?search=${this.state.searchTerm}&page=${this.state.currentPage}`
+        `https://swapi.dev/api/people?search=${searchTerm}&page=${currentPage}`
     )
-      .then((response) => response.json())
-      .then((data) => {
-        this.setState({
-          ...this.state,
-          searchResults: data.results,
-          prevUrl: data.previous,
-          nextUrl: data.next,
+        .then((response) => response.json())
+        .then((data) => {
+          this.setState({
+            ...this.state,
+            searchResults: data.results,
+            prevUrl: data.previous,
+            nextUrl: data.next,
+            currentPage: currentPage
+          });
+          localStorage.setItem('searchTerm', searchTerm);
+          localStorage.setItem('prevUrl', data.previous);
+          localStorage.setItem('nextUrl', data.next);
+          localStorage.setItem('currentPage', currentPage.toString());
+        })
+        .catch((error) => {
+          console.error('Error fetching data:', error);
         });
-        localStorage.setItem('prevUrl', data.previous);
-        localStorage.setItem('nextUrl', data.next);
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-      });
+  }
+
+  componentDidMount() {
+    this.fetchItems(this.state.searchTerm, this.state.currentPage);
   }
 
   handleSearch() {
-    fetch(
-      `https://swapi.dev/api/people?search=${this.state.searchTerm}&page=${this.state.currentPage}`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        this.setState({
-          ...this.state,
-          searchResults: data.results,
-          prevUrl: data.previous,
-          nextUrl: data.next,
-
-        });
-        localStorage.setItem('prevUrl', data.previous);
-        localStorage.setItem('nextUrl', data.next);
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-      });
+    this.fetchItems(this.state.searchTerm, 1);
   }
 
   handleInputChange(event) {
@@ -68,27 +58,7 @@ class App extends Component<null, IState> {
   }
 
   onPageChange(page) {
-    fetch(
-      `https://swapi.dev/api/people?search=${this.state.searchTerm}&page=${page}`
-    )
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        this.setState({
-          ...this.state,
-          searchResults: data.results,
-          currentPage: page,
-          prevUrl: data.previous,
-          nextUrl: data.next,
-        });
-        localStorage.setItem('prevUrl', data.previous);
-        localStorage.setItem('nextUrl', data.next);
-        localStorage.setItem('currentPage', page.toString());
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-      });
+    this.fetchItems(this.state.searchTerm, page);
   }
 
   render() {

@@ -6,7 +6,7 @@ class Main extends React.Component<IItems, null> {
     return (
       <main>
         {this.props.items.map((item) => (
-          <article key={item}>{item}</article>
+          <article key={item.name}>{item.name}</article>
         ))}
       </main>
     );

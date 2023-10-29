@@ -1,11 +1,21 @@
 import React  from 'react';
 import styles from './header.module.css';
 
-class Header extends React.Component<null, null> {
+
+interface IProps {
+  searchItems: (value: string) => void
+}
+
+class Header extends React.Component<IProps, null> {
+
   render() {
-    return <header className={styles.header}>
-      <input/>
-      <button>Search</button>
+    return <header>
+      <form className={styles.header__form} onSubmit={(e) => {
+        this.props.searchItems(e.target[0].value)
+      }}>
+      <input type="text" />
+      <button type="submit">Search</button>
+      </form>
     </header>;
   }
 }

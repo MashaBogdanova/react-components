@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Header from './components/header/Header';
 import Pagination from './components/Pagination';
+import Items from "./components/Items";
 
 interface IState {
   searchTerm: string;
@@ -87,11 +88,7 @@ class App extends Component<null, IState> {
           handleSearch={this.handleSearch.bind(this)}
         />
 
-        <ul>
-          {this.state.searchResults.map((result, index) => (
-            <li key={index}>{result.name}</li>
-          ))}
-        </ul>
+        <Items items={this.state.searchResults}/>
 
         <Pagination
           prevUrl={this.state.prevUrl}

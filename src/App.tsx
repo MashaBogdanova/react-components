@@ -1,71 +1,104 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Header from './components/header/Header';
-import Main from './components/Main';
-import './App.css';
-import {render} from "react-dom";
-
-interface IItem {
-  name: string;
-  height: string;
-  mass: string;
-  hair_color: string;
-  skin_color: string;
-  eye_color: string;
-  birth_year: string;
-  gender: string;
-  homeworld: string;
-  films: string[];
-  species: [];
-  vehicles: string[];
-  starships: string[];
-  created: string;
-  edited: string;
-  url: string;
-}
-
-export interface IItems {
-  items: IItem[];
-}
+import Pagination from './components/Pagination';
 
 interface IState {
-  items: IItem[];
+  searchTerm: string;
+  searchResults: [];
+  prevUrl: string | null;
+  nextUrl: string | null;
+  currentPage: number;
 }
 
-class App extends React.Component<null, IState> {
+class App extends Component<null, IState> {
   state = {
-    items: [],
+    searchTerm: '',
+    searchResults: [],
+    prevUrl: null,
+    nextUrl: null,
+    currentPage: 1,
   };
 
   componentDidMount() {
-    fetch('https://swapi.dev/api/people?search=&page=1')
+    fetch(`https://swapi.dev/api/people?search=&page=${this.state.currentPage}`)
       .then((response) => response.json())
-      .then((response) => {
-        this.setState({ items: response.results });
+      .then((data) => {
+        this.setState({
+          ...this.state,
+          searchResults: data.results,
+          prevUrl: data.previous,
+          nextUrl: data.next,
+        });
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
       });
   }
 
-  async searchItems(term) {
-    try {
-      let responsePromise = await fetch(
-        `https://swapi.dev/api/people?search=Luke&page=1`
-      );
-      console.log(responsePromise)
-      // responsePromise
-      //    .then((response) => response.json())
-      //    .then((response) => {
-      //      debugger
-      //      this.setState({ items: response.results });
-      //    });
-    } catch (e) {
-      console.log(e);
-    }
+  handleSearch() {
+    fetch(
+      `https://swapi.dev/api/people?search=${this.state.searchTerm}&page=${this.state.currentPage}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({
+          ...this.state,
+          searchResults: data.results,
+          prevUrl: data.previous,
+          nextUrl: data.next,
+        });
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }
+
+  handleInputChange(event) {
+    this.setState({ ...this.state, searchTerm: event.target.value });
+  }
+
+  onPageChange(page) {
+    fetch(
+      `https://swapi.dev/api/people?search=${this.state.searchTerm}&page=${page}`
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        this.setState({
+          ...this.state,
+          searchResults: data.results,
+          currentPage: page,
+          prevUrl: data.previous,
+          nextUrl: data.next,
+        });
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
   }
 
   render() {
     return (
       <>
-        <Header searchItems={this.searchItems} />
-        <Main items={this.state.items} />
+        <Header
+          searchTerm={this.state.searchTerm}
+          handleInputChange={this.handleInputChange.bind(this)}
+          handleSearch={this.handleSearch.bind(this)}
+        />
+
+        <ul>
+          {this.state.searchResults.map((result, index) => (
+            <li key={index}>{result.name}</li>
+          ))}
+        </ul>
+
+        <Pagination
+          prevUrl={this.state.prevUrl}
+          nextUrl={this.state.nextUrl}
+          onPageChange={this.onPageChange.bind(this)}
+          currentPage={this.state.currentPage}
+        />
       </>
     );
   }

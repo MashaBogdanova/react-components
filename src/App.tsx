@@ -16,16 +16,10 @@ interface IState {
 
 class App extends Component<null, IState> {
   state = {
-    searchTerm: localStorage.getItem('searchTerm')
-      ? localStorage.getItem('searchTerm')
-      : '',
+    searchTerm: localStorage.getItem('searchTerm') || '',
     searchResults: [],
-    prevUrl: localStorage.getItem('prevUrl')
-      ? localStorage.getItem('prevUrl')
-      : null,
-    nextUrl: localStorage.getItem('nextUrl')
-      ? localStorage.getItem('nextUrl')
-      : null,
+    prevUrl: localStorage.getItem('prevUrl') || null,
+    nextUrl: localStorage.getItem('nextUrl') || null,
     currentPage: localStorage.getItem('currentPage')
       ? Number(localStorage.getItem('currentPage'))
       : 1,

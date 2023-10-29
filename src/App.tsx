@@ -11,6 +11,7 @@ interface IState {
   nextUrl: string | null;
   currentPage: number;
   wasPageLoaded: boolean;
+  isError: boolean;
 }
 
 class App extends Component<null, IState> {
@@ -29,10 +30,11 @@ class App extends Component<null, IState> {
       ? Number(localStorage.getItem('currentPage'))
       : 1,
     wasPageLoaded: false,
+    isError: false,
   };
 
   fetchItems(searchTerm, currentPage) {
-    this.setState({ ...this.state, wasPageLoaded: false });
+    this.setState({ ...this.state, wasPageLoaded: false, isError: false });
     fetch(
       `https://swapi.dev/api/people?search=${searchTerm}&page=${currentPage}`
     )
@@ -53,6 +55,7 @@ class App extends Component<null, IState> {
         localStorage.setItem('currentPage', currentPage.toString());
       })
       .catch((error) => {
+        this.setState({ ...this.state, isError: true });
         console.error('Error fetching data:', error);
       });
   }
@@ -82,7 +85,10 @@ class App extends Component<null, IState> {
           handleInputChange={this.handleInputChange.bind(this)}
           handleSearch={this.handleSearch.bind(this)}
         />
-        {!this.state.wasPageLoaded ? (
+
+        {this.state.isError ? (
+          <p>Oops... Something went wrong. Reload the page.</p>
+        ) : !this.state.wasPageLoaded ? (
           <p>Loading...</p>
         ) : (
           <Items items={this.state.searchResults} />

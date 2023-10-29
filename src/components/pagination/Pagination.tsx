@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import styles from './pagination.module.css';
 
 interface IProps {
   prevUrl: string | null;
@@ -10,7 +11,7 @@ interface IProps {
 class Pagination extends Component<IProps, null> {
   render() {
     return (
-      <section>
+      <section className={styles.pagination}>
         <button
           disabled={this.props.prevUrl === null}
           onClick={() => this.props.onPageChange(this.props.currentPage - 1)}

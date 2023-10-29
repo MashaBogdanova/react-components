@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import Header from './components/header/Header';
-import Pagination from './components/Pagination';
-import Items from "./components/Items";
+import SearchForm from './components/header/Items';
+import Pagination from './components/pagination/Pagination';
+import Items from './components/Items';
+import styles from './App.module.css';
 
 interface IState {
   searchTerm: string;
@@ -13,15 +14,17 @@ interface IState {
 
 class App extends Component<null, IState> {
   state = {
-    searchTerm: '',
+    searchTerm: localStorage.getItem('searchTerm') ? localStorage.getItem('searchTerm') : '',
     searchResults: [],
-    prevUrl: null,
-    nextUrl: null,
-    currentPage: 1,
+    prevUrl: localStorage.getItem('prevUrl') ? localStorage.getItem('prevUrl') : null,
+    nextUrl: localStorage.getItem('nextUrl') ? localStorage.getItem('nextUrl') : null,
+    currentPage: localStorage.getItem('currentPage') ? Number(localStorage.getItem('currentPage')) : 1,
   };
 
   componentDidMount() {
-    fetch(`https://swapi.dev/api/people?search=&page=${this.state.currentPage}`)
+    fetch(
+      `https://swapi.dev/api/people?search=${this.state.searchTerm}&page=${this.state.currentPage}`
+    )
       .then((response) => response.json())
       .then((data) => {
         this.setState({
@@ -30,6 +33,8 @@ class App extends Component<null, IState> {
           prevUrl: data.previous,
           nextUrl: data.next,
         });
+        localStorage.setItem('prevUrl', data.previous);
+        localStorage.setItem('nextUrl', data.next);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
@@ -47,7 +52,10 @@ class App extends Component<null, IState> {
           searchResults: data.results,
           prevUrl: data.previous,
           nextUrl: data.next,
+
         });
+        localStorage.setItem('prevUrl', data.previous);
+        localStorage.setItem('nextUrl', data.next);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
@@ -56,6 +64,7 @@ class App extends Component<null, IState> {
 
   handleInputChange(event) {
     this.setState({ ...this.state, searchTerm: event.target.value });
+    localStorage.setItem('currentPage', event.target.value);
   }
 
   onPageChange(page) {
@@ -73,6 +82,9 @@ class App extends Component<null, IState> {
           prevUrl: data.previous,
           nextUrl: data.next,
         });
+        localStorage.setItem('prevUrl', data.previous);
+        localStorage.setItem('nextUrl', data.next);
+        localStorage.setItem('currentPage', page.toString());
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
@@ -81,14 +93,14 @@ class App extends Component<null, IState> {
 
   render() {
     return (
-      <>
-        <Header
+      <main className={styles.main}>
+        <SearchForm
           searchTerm={this.state.searchTerm}
           handleInputChange={this.handleInputChange.bind(this)}
           handleSearch={this.handleSearch.bind(this)}
         />
 
-        <Items items={this.state.searchResults}/>
+        <Items items={this.state.searchResults} />
 
         <Pagination
           prevUrl={this.state.prevUrl}
@@ -96,7 +108,7 @@ class App extends Component<null, IState> {
           onPageChange={this.onPageChange.bind(this)}
           currentPage={this.state.currentPage}
         />
-      </>
+      </main>
     );
   }
 }

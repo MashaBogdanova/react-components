@@ -1,4 +1,4 @@
-import React  from 'react';
+import React from 'react';
 
 interface IItem {
   name: string;
@@ -26,11 +26,13 @@ interface IProps {
 class Items extends React.Component<IProps, null> {
   render() {
     return (
+      <section>
         <ul>
           {this.props.items.map((result, index) => (
-              <li key={index}>{result.name}</li>
+            <li key={index}>{result.name}</li>
           ))}
         </ul>
+      </section>
     );
   }
 }

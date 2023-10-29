@@ -7,10 +7,10 @@ interface IProps {
   handleSearch: () => void;
 }
 
-class Header extends React.Component<IProps, null> {
+class Items extends React.Component<IProps, null> {
   render() {
     return (
-      <header className={styles.header__form}>
+      <section className={styles.items}>
         <input
           type="text"
           placeholder="Search for items"
@@ -18,9 +18,9 @@ class Header extends React.Component<IProps, null> {
           onChange={this.props.handleInputChange}
         />
         <button onClick={this.props.handleSearch}>Search</button>
-      </header>
+      </section>
     );
   }
 }
 
-export default Header;
+export default Items;

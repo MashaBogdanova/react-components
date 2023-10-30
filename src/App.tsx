@@ -50,7 +50,6 @@ class App extends Component<null, IState> {
       })
       .catch((error) => {
         this.setState({ ...this.state, isError: true });
-        console.error('Error fetching data:', error);
       });
   }
 
@@ -72,8 +71,14 @@ class App extends Component<null, IState> {
   }
 
   render() {
+    if (this.state.isError) {
+      throw new Error('Generated error');
+    }
     return (
       <main className={styles.main}>
+        <button onClick={() => this.setState({ ...this.state, isError: true })}>
+          Show Error
+        </button>
         <SearchForm
           searchTerm={this.state.searchTerm}
           handleInputChange={this.handleInputChange.bind(this)}

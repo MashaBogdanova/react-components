@@ -48,7 +48,7 @@ class App extends Component<null, IState> {
         localStorage.setItem('nextUrl', data.next);
         localStorage.setItem('currentPage', currentPage.toString());
       })
-      .catch((error) => {
+      .catch(() => {
         this.setState({ ...this.state, isError: true });
       });
   }

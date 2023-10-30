@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import SearchForm from './components/header/Items';
+import React, { ChangeEvent, Component } from 'react';
+import SearchForm from './components/search-form/SearchForm';
 import Pagination from './components/pagination/Pagination';
-import Items from './components/Items';
+import Items, { IItems } from './components/Items';
 import styles from './App.module.css';
 
 interface IState {
   searchTerm: string;
-  searchResults: [];
+  searchResults: IItems[];
   prevUrl: string | null;
   nextUrl: string | null;
   currentPage: number;
@@ -14,7 +14,7 @@ interface IState {
   isError: boolean;
 }
 
-class App extends Component<null, IState> {
+class App extends Component<unknown, IState> {
   state = {
     searchTerm: localStorage.getItem('searchTerm') || '',
     searchResults: [],
@@ -27,7 +27,7 @@ class App extends Component<null, IState> {
     isError: false,
   };
 
-  fetchItems(searchTerm, currentPage) {
+  fetchItems(searchTerm: string, currentPage: number) {
     this.setState({ ...this.state, wasPageLoaded: false, isError: false });
     fetch(
       `https://swapi.dev/api/people?search=${searchTerm}&page=${currentPage}`
@@ -61,12 +61,12 @@ class App extends Component<null, IState> {
     this.fetchItems(this.state.searchTerm, 1);
   }
 
-  handleInputChange(event) {
+  handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     this.setState({ ...this.state, searchTerm: event.target.value });
     localStorage.setItem('currentPage', event.target.value);
   }
 
-  onPageChange(page) {
+  onPageChange(page: number) {
     this.fetchItems(this.state.searchTerm, page);
   }
 
@@ -76,7 +76,14 @@ class App extends Component<null, IState> {
     }
     return (
       <main className={styles.main}>
-        <button onClick={() => this.setState({ ...this.state, isError: true })}>
+        <button
+          onClick={() =>
+            this.setState({
+              ...this.state,
+              isError: true,
+            })
+          }
+        >
           Show Error
         </button>
         <SearchForm

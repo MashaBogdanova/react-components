@@ -1,5 +1,5 @@
 import React, { ChangeEventHandler } from 'react';
-import styles from './header.module.css';
+import styles from './search-form.module.css';
 
 interface IProps {
   searchTerm: string;
@@ -7,7 +7,7 @@ interface IProps {
   handleSearch: () => void;
 }
 
-class Items extends React.Component<IProps, null> {
+class SearchForm extends React.Component<IProps, unknown> {
   render() {
     return (
       <section className={styles.items}>
@@ -23,4 +23,4 @@ class Items extends React.Component<IProps, null> {
   }
 }
 
-export default Items;
+export default SearchForm;

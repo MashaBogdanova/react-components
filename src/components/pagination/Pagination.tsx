@@ -8,7 +8,7 @@ interface IProps {
   onPageChange: (currentPage: number) => void;
 }
 
-class Pagination extends Component<IProps, null> {
+class Pagination extends Component<IProps, unknown> {
   render() {
     return (
       <section className={styles.pagination}>

@@ -19,11 +19,11 @@ interface IItem {
   url: string;
 }
 
-interface IProps {
+export interface IItems {
   items: IItem[];
 }
 
-class Items extends React.Component<IProps, null> {
+class Items extends React.Component<IItems, unknown> {
   render() {
     return (
       <section>

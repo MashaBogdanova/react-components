@@ -22,7 +22,14 @@ class ErrorBoundary extends React.Component<IProps, IState> {
 
   render() {
     if (this.state.isError) {
-      return this.state.isError && <p>Oops... Something went wrong. {this.state.errorMessage}. Reload the page.</p>;
+      return (
+        this.state.isError && (
+          <p>
+            Oops... Something went wrong. {this.state.errorMessage}. Reload the
+            page.
+          </p>
+        )
+      );
     }
     return this.props.children;
   }

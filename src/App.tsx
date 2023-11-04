@@ -1,12 +1,17 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import SearchForm from './components/search-form/SearchForm';
 import Pagination from './components/pagination/Pagination';
-import Items, { IItem } from './components/Items';
+import Items from './components/items/Items';
 import styles from './App.module.css';
+import ItemDetails, { IItem } from './components/item-details/ItemDetails';
+import Preloader from './components/preloader/Preloader';
 
 function App() {
   const [searchResults, setSearchResults] = useState<IItem[]>([]);
-  const [wasPageLoaded, setPageLoaded] = useState<boolean>(false);
+  const [item, setItem] = useState<IItem>(null);
+  const [isItemShown, setItemShown] = useState<boolean>(false);
+  const [wasItemsLoaded, setItemsLoaded] = useState<boolean>(false);
+  const [wasItemLoaded, setItemLoaded] = useState<boolean>(false);
   const [isError, setError] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>(
     localStorage.getItem('searchTerm') || ''
@@ -28,7 +33,7 @@ function App() {
   }, [searchTerm, currentPage]);
 
   function fetchItems(searchTerm: string, currentPage: number) {
-    setPageLoaded(false);
+    setItemsLoaded(false);
     setError(false);
 
     fetch(
@@ -40,12 +45,28 @@ function App() {
         setPrevUrl(data.previous);
         setNextUrl(data.next);
         setCurrentPage(currentPage);
-        setPageLoaded(true);
+        setItemsLoaded(true);
 
         localStorage.setItem('searchTerm', searchTerm);
         localStorage.setItem('prevUrl', data.previous);
         localStorage.setItem('nextUrl', data.next);
         localStorage.setItem('currentPage', currentPage.toString());
+      })
+      .catch(() => {
+        setError(true);
+      });
+  }
+
+  function fetchItem(url) {
+    setItemShown(true);
+    setItemLoaded(false);
+    setError(false);
+
+    fetch(`${url}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setItem(data);
+        setItemLoaded(true);
       })
       .catch(() => {
         setError(true);
@@ -80,12 +101,19 @@ function App() {
 
       {isError ? (
         <p>Oops... Something went wrong. Reload the page.</p>
-      ) : !wasPageLoaded ? (
-        <p>Loading...</p>
       ) : (
-        <Items items={searchResults} />
-      )}
+        <section className={styles.results}>
+          {!wasItemsLoaded ? (
+            <Preloader />
+          ) : (
+            <Items items={searchResults} onItemClick={fetchItem} />
+          )}
 
+          {wasItemsLoaded &&
+            isItemShown &&
+            (!wasItemLoaded ? <Preloader /> : <ItemDetails item={item} />)}
+        </section>
+      )}
       <Pagination
         prevUrl={prevUrl}
         nextUrl={nextUrl}

@@ -1,11 +1,21 @@
 .main {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
 
-  display: flex;
-  flex-direction: column;
-  gap: 10vh;
-  align-self: start;
+    display: flex;
+    flex-direction: column;
+    gap: 10vh;
+    align-self: start;
+}
+
+.results {
+    display: flex;
+    gap: 4em;
+    justify-content: space-between;
+    width: 45vw;
+    height: 35vh;
+    padding: 4em;
+    border: 2px dotted var(--color-primary);
 }

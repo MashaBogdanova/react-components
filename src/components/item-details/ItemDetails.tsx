@@ -19,20 +19,18 @@ export interface IItem {
   url: string;
 }
 
-export interface IItems {
-  items: IItem[];
-}
-
-function Items(props: IItems) {
+function ItemDetails({ item }: IItem) {
   return (
-    <section>
+    <article>
       <ul>
-        {props.items.map((result, index) => (
-          <li key={index}>{result.name}</li>
-        ))}
+        <li>Name: {item.name}</li>
+        <li>Year of Birth: {item.birth_year}</li>
+        <li>Gender: {item.gender}</li>
+        <li>Eye color: {item.eye_color}</li>
+        <li>Hair color: {item.hair_color}</li>
       </ul>
-    </section>
+    </article>
   );
 }
 
-export default Items;
+export default ItemDetails;

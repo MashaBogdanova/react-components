@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styles from './pagination.module.css';
 
 interface IProps {
@@ -8,25 +8,23 @@ interface IProps {
   onPageChange: (currentPage: number) => void;
 }
 
-class Pagination extends Component<IProps, unknown> {
-  render() {
-    return (
-      <section className={styles.pagination}>
-        <button
-          disabled={this.props.prevUrl === null}
-          onClick={() => this.props.onPageChange(this.props.currentPage - 1)}
-        >
-          &lt;
-        </button>
-        <button
-          disabled={this.props.nextUrl === null}
-          onClick={() => this.props.onPageChange(this.props.currentPage + 1)}
-        >
-          &gt;
-        </button>
-      </section>
-    );
-  }
+function Pagination({ prevUrl, nextUrl, currentPage, onPageChange }: IProps) {
+  return (
+    <section className={styles.pagination}>
+      <button
+        disabled={prevUrl === null}
+        onClick={() => onPageChange(currentPage - 1)}
+      >
+        &lt;
+      </button>
+      <button
+        disabled={nextUrl === null}
+        onClick={() => onPageChange(currentPage + 1)}
+      >
+        &gt;
+      </button>
+    </section>
+  );
 }
 
 export default Pagination;

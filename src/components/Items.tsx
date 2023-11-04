@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface IItem {
+export interface IItem {
   name: string;
   height: string;
   mass: string;
@@ -23,18 +23,16 @@ export interface IItems {
   items: IItem[];
 }
 
-class Items extends React.Component<IItems, unknown> {
-  render() {
-    return (
-      <section>
-        <ul>
-          {this.props.items.map((result, index) => (
-            <li key={index}>{result.name}</li>
-          ))}
-        </ul>
-      </section>
-    );
-  }
+function Items(props: IItems) {
+  return (
+    <section>
+      <ul>
+        {props.items.map((result, index) => (
+          <li key={index}>{result.name}</li>
+        ))}
+      </ul>
+    </section>
+  );
 }
 
 export default Items;

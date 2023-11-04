@@ -7,20 +7,18 @@ interface IProps {
   handleSearch: () => void;
 }
 
-class SearchForm extends React.Component<IProps, unknown> {
-  render() {
-    return (
-      <section className={styles.items}>
-        <input
-          type="text"
-          placeholder="Search for items"
-          value={this.props.searchTerm}
-          onChange={this.props.handleInputChange}
-        />
-        <button onClick={this.props.handleSearch}>Search</button>
-      </section>
-    );
-  }
+function SearchForm(props: IProps) {
+  return (
+    <section className={styles.items}>
+      <input
+        type="text"
+        placeholder="Search for items"
+        value={props.searchTerm}
+        onChange={props.handleInputChange}
+      />
+      <button onClick={props.handleSearch}>Search</button>
+    </section>
+  );
 }
 
 export default SearchForm;

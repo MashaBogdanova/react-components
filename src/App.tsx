@@ -1,47 +1,46 @@
-import React, { ChangeEvent, Component } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import SearchForm from './components/search-form/SearchForm';
 import Pagination from './components/pagination/Pagination';
-import Items, { IItems } from './components/Items';
+import Items, { IItem } from './components/Items';
 import styles from './App.module.css';
 
-interface IState {
-  searchTerm: string;
-  searchResults: IItems[];
-  prevUrl: string | null;
-  nextUrl: string | null;
-  currentPage: number;
-  wasPageLoaded: boolean;
-  isError: boolean;
-}
-
-class App extends Component<unknown, IState> {
-  state = {
-    searchTerm: localStorage.getItem('searchTerm') || '',
-    searchResults: [],
-    prevUrl: localStorage.getItem('prevUrl') || null,
-    nextUrl: localStorage.getItem('nextUrl') || null,
-    currentPage: localStorage.getItem('currentPage')
+function App() {
+  const [searchResults, setSearchResults] = useState<IItem[]>([]);
+  const [wasPageLoaded, setPageLoaded] = useState<boolean>(false);
+  const [isError, setError] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState<string>(
+    localStorage.getItem('searchTerm') || ''
+  );
+  const [prevUrl, setPrevUrl] = useState<string | null>(
+    localStorage.getItem('prevUrl') || null
+  );
+  const [nextUrl, setNextUrl] = useState<string | null>(
+    localStorage.getItem('nextUrl') || null
+  );
+  const [currentPage, setCurrentPage] = useState<number>(
+    localStorage.getItem('currentPage')
       ? Number(localStorage.getItem('currentPage'))
-      : 1,
-    wasPageLoaded: false,
-    isError: false,
-  };
+      : 1
+  );
 
-  fetchItems(searchTerm: string, currentPage: number) {
-    this.setState({ ...this.state, wasPageLoaded: false, isError: false });
+  useEffect(() => {
+    fetchItems(searchTerm, currentPage);
+  }, [searchTerm, currentPage]);
+
+  function fetchItems(searchTerm: string, currentPage: number) {
+    setPageLoaded(false);
+    setError(false);
+
     fetch(
       `https://swapi.dev/api/people?search=${searchTerm}&page=${currentPage}`
     )
       .then((response) => response.json())
       .then((data) => {
-        this.setState({
-          ...this.state,
-          searchResults: data.results,
-          prevUrl: data.previous,
-          nextUrl: data.next,
-          currentPage: currentPage,
-          wasPageLoaded: true,
-        });
+        setSearchResults(data.results);
+        setPrevUrl(data.previous);
+        setNextUrl(data.next);
+        setCurrentPage(currentPage);
+        setPageLoaded(true);
 
         localStorage.setItem('searchTerm', searchTerm);
         localStorage.setItem('prevUrl', data.previous);
@@ -49,66 +48,52 @@ class App extends Component<unknown, IState> {
         localStorage.setItem('currentPage', currentPage.toString());
       })
       .catch(() => {
-        this.setState({ ...this.state, isError: true });
+        setError(true);
       });
   }
 
-  componentDidMount() {
-    this.fetchItems(this.state.searchTerm, this.state.currentPage);
+  function handleSearch() {
+    fetchItems(searchTerm, 1);
   }
 
-  handleSearch() {
-    this.fetchItems(this.state.searchTerm, 1);
-  }
-
-  handleInputChange(event: ChangeEvent<HTMLInputElement>) {
-    this.setState({ ...this.state, searchTerm: event.target.value });
+  function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
+    setSearchTerm(event.target.value);
     localStorage.setItem('currentPage', event.target.value);
   }
 
-  onPageChange(page: number) {
-    this.fetchItems(this.state.searchTerm, page);
+  function onPageChange(page: number) {
+    fetchItems(searchTerm, page);
   }
 
-  render() {
-    if (this.state.isError) {
-      throw new Error('Generated error');
-    }
-    return (
-      <main className={styles.main}>
-        <button
-          onClick={() =>
-            this.setState({
-              ...this.state,
-              isError: true,
-            })
-          }
-        >
-          Show Error
-        </button>
-        <SearchForm
-          searchTerm={this.state.searchTerm}
-          handleInputChange={this.handleInputChange.bind(this)}
-          handleSearch={this.handleSearch.bind(this)}
-        />
-
-        {this.state.isError ? (
-          <p>Oops... Something went wrong. Reload the page.</p>
-        ) : !this.state.wasPageLoaded ? (
-          <p>Loading...</p>
-        ) : (
-          <Items items={this.state.searchResults} />
-        )}
-
-        <Pagination
-          prevUrl={this.state.prevUrl}
-          nextUrl={this.state.nextUrl}
-          onPageChange={this.onPageChange.bind(this)}
-          currentPage={this.state.currentPage}
-        />
-      </main>
-    );
+  if (isError) {
+    throw new Error('Generated error');
   }
+
+  return (
+    <main className={styles.main}>
+      <button onClick={() => setError(true)}>Show Error</button>
+      <SearchForm
+        searchTerm={searchTerm}
+        handleInputChange={handleInputChange}
+        handleSearch={handleSearch}
+      />
+
+      {isError ? (
+        <p>Oops... Something went wrong. Reload the page.</p>
+      ) : !wasPageLoaded ? (
+        <p>Loading...</p>
+      ) : (
+        <Items items={searchResults} />
+      )}
+
+      <Pagination
+        prevUrl={prevUrl}
+        nextUrl={nextUrl}
+        onPageChange={onPageChange}
+        currentPage={currentPage}
+      />
+    </main>
+  );
 }
 
 export default App;

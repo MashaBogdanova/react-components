@@ -106,7 +106,11 @@ function App() {
           {!wasItemsLoaded ? (
             <Preloader />
           ) : (
-            <Items items={searchResults} onItemClick={fetchItem} setItemShown={setItemShown} />
+            <Items
+              items={searchResults}
+              onItemClick={fetchItem}
+              setItemShown={setItemShown}
+            />
           )}
 
           {wasItemsLoaded &&

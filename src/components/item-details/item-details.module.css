@@ -1,0 +1,15 @@
+.itemDetails {
+  display: flex;
+  align-items: start;
+  gap: 1em;
+}
+
+.closeIcon {
+  width: 15px;
+  transition: transform ease 500ms;
+}
+
+.closeIcon:hover {
+  cursor: pointer;
+  transform: rotate(90deg);
+}

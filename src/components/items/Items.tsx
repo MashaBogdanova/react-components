@@ -5,6 +5,7 @@ import styles from './items.module.css';
 interface IProps {
   items: IItem[];
   onItemClick: (url: string) => void;
+  // setItemShown: (boolean) => void;
 }
 
 function Items({ items, onItemClick }: IProps) {

@@ -1,4 +1,4 @@
 .item:hover {
-    color: var(--color-primary);
-    cursor: pointer;
+  color: var(--color-primary);
+  cursor: pointer;
 }

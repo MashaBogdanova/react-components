@@ -1,4 +1,6 @@
 import React from 'react';
+import styles from './item-details.module.css';
+import closeIcon from '../../assets/icon-close.png';
 
 export interface IItem {
   name: string;
@@ -19,9 +21,14 @@ export interface IItem {
   url: string;
 }
 
-function ItemDetails({ item }: IItem) {
+interface IProps {
+  item: IItem;
+  setItemShown: (boolean) => void;
+}
+
+function ItemDetails({ item, setItemShown }: IProps) {
   return (
-    <article>
+    <article className={styles.itemDetails}>
       <ul>
         <li>Name: {item.name}</li>
         <li>Year of Birth: {item.birth_year}</li>
@@ -29,6 +36,12 @@ function ItemDetails({ item }: IItem) {
         <li>Eye color: {item.eye_color}</li>
         <li>Hair color: {item.hair_color}</li>
       </ul>
+      <img
+        className={styles.closeIcon}
+        onClick={() => setItemShown(false)}
+        src={closeIcon}
+        alt="close"
+      />
     </article>
   );
 }

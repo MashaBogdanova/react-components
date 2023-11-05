@@ -106,12 +106,16 @@ function App() {
           {!wasItemsLoaded ? (
             <Preloader />
           ) : (
-            <Items items={searchResults} onItemClick={fetchItem} />
+            <Items items={searchResults} onItemClick={fetchItem} setItemShown={setItemShown} />
           )}
 
           {wasItemsLoaded &&
             isItemShown &&
-            (!wasItemLoaded ? <Preloader /> : <ItemDetails item={item} />)}
+            (!wasItemLoaded ? (
+              <Preloader />
+            ) : (
+              <ItemDetails item={item} setItemShown={setItemShown} />
+            ))}
         </section>
       )}
       <Pagination

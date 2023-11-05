@@ -1,5 +1,6 @@
 import React from 'react';
 import { IItem } from '../item-details/ItemDetails';
+import styles from './items.module.css';
 
 interface IProps {
   items: IItem[];
@@ -11,7 +12,11 @@ function Items({ items, onItemClick }: IProps) {
     <article>
       <ul>
         {items.map((result, index) => (
-          <li key={index} onClick={() => onItemClick(result.url)}>
+          <li
+            className={styles.item}
+            key={index}
+            onClick={() => onItemClick(result.url)}
+          >
             {result.name}
           </li>
         ))}

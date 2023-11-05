@@ -12,12 +12,15 @@ function Pagination({ prevUrl, nextUrl, currentPage, onPageChange }: IProps) {
   return (
     <section className={styles.pagination}>
       <button
+        className={styles.button}
         disabled={prevUrl === null}
         onClick={() => onPageChange(currentPage - 1)}
       >
         &lt;
       </button>
+      <p className={styles.currentPage}>{currentPage}</p>
       <button
+        className={styles.button}
         disabled={nextUrl === null}
         onClick={() => onPageChange(currentPage + 1)}
       >

@@ -1,5 +1,20 @@
 .pagination {
   display: flex;
+  align-items: center;
   justify-content: center;
   gap: 1vw;
+}
+
+.currentPage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5em;
+  height: 2.5em;
+  border-radius: 50%;
+  border: 2px dotted var(--color-primary);
+}
+
+.button {
+  width: 2.5em;
 }

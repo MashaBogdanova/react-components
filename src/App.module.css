@@ -1,21 +1,22 @@
 .main {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 2rem;
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 6vh;
+  align-items: center;
+  align-self: start;
 
-    display: flex;
-    flex-direction: column;
-    gap: 10vh;
-    align-self: start;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
 }
 
 .results {
-    display: flex;
-    gap: 4em;
-    justify-content: space-between;
-    width: 45vw;
-    height: 35vh;
-    padding: 4em;
-    border: 2px dotted var(--color-primary);
+  display: flex;
+  gap: 4em;
+  justify-content: space-between;
+  width: 45vw;
+  height: 35vh;
+  padding: 4em;
+  border: 2px dotted var(--color-primary);
 }

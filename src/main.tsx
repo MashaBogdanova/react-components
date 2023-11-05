@@ -15,13 +15,6 @@ const router = createBrowserRouter([
       </ErrorBoundary>
     ),
     errorElement: <RouterError />,
-    // children: [
-    //     {
-    //         path: "items/:page/:",
-    //         element: <Team />,
-    //         loader: teamLoader,
-    //     },
-    // ],
   },
 ]);
 

@@ -16,7 +16,7 @@ function Items({ items, onItemClick }: IProps) {
           <li
             className={styles.item}
             key={index}
-            onClick={() => onItemClick(result.url)}
+            onClick={() => onItemClick(getItemId(items[0].url))}
           >
             {result.name}
           </li>
@@ -24,6 +24,11 @@ function Items({ items, onItemClick }: IProps) {
       </ul>
     </article>
   );
+}
+
+function getItemId(url: string) {
+  const match = url.match(/\d+/);
+  return match && match[0];
 }
 
 export default Items;

@@ -32,11 +32,13 @@ function App() {
 
   useEffect(() => {
     fetchItems(searchTerm, currentPage);
+      // eslint-disable-next-line
   }, [searchTerm, currentPage]);
 
   function fetchItems(searchTerm: string, currentPage: number) {
     setItemsLoaded(false);
     setError(false);
+    setSearchParams(`page=${currentPage}`);
 
     fetch(
       `https://swapi.dev/api/people?search=${searchTerm}&page=${currentPage}`
@@ -59,12 +61,13 @@ function App() {
       });
   }
 
-  function fetchItem(url) {
+  function fetchItem(id: string) {
     setItemShown(true);
     setItemLoaded(false);
     setError(false);
+    setSearchParams(() => `page=${currentPage}&details=${id}`);
 
-    fetch(`${url}`)
+    fetch(`https://swapi.dev/api/people/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setItem(data);
@@ -87,6 +90,7 @@ function App() {
   function onPageChange(page: number) {
     fetchItems(searchTerm, page);
     setSearchParams(() => `page=${page}`);
+    setItemShown(false);
   }
 
   if (isError) {

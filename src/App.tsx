@@ -5,6 +5,7 @@ import Items from './components/items/Items';
 import styles from './App.module.css';
 import ItemDetails, { IItem } from './components/item-details/ItemDetails';
 import Preloader from './components/preloader/Preloader';
+import { useSearchParams } from 'react-router-dom';
 
 function App() {
   const [searchResults, setSearchResults] = useState<IItem[]>([]);
@@ -27,6 +28,7 @@ function App() {
       ? Number(localStorage.getItem('currentPage'))
       : 1
   );
+  const [, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     fetchItems(searchTerm, currentPage);
@@ -84,6 +86,7 @@ function App() {
 
   function onPageChange(page: number) {
     fetchItems(searchTerm, page);
+    setSearchParams(() => `page=${page}`);
   }
 
   if (isError) {
@@ -122,12 +125,14 @@ function App() {
             ))}
         </section>
       )}
-      <Pagination
-        prevUrl={prevUrl}
-        nextUrl={nextUrl}
-        onPageChange={onPageChange}
-        currentPage={currentPage}
-      />
+      {wasItemsLoaded && (
+        <Pagination
+          prevUrl={prevUrl}
+          nextUrl={nextUrl}
+          onPageChange={onPageChange}
+          currentPage={currentPage}
+        />
+      )}
     </main>
   );
 }

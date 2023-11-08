@@ -3,10 +3,11 @@ import SearchForm from './components/search-form/SearchForm';
 import Pagination from './components/pagination/Pagination';
 import Items from './components/items/Items';
 import styles from './App.module.css';
-import ItemDetails, { IItem } from './components/item-details/ItemDetails';
+import ItemDetails from './components/item-details/ItemDetails';
 import Preloader from './components/preloader/Preloader';
 import { useSearchParams } from 'react-router-dom';
-import { fetchCurrentItem, fetchItems, IResponse } from './api/api';
+import { fetchCurrentItem, fetchItems } from './api/api';
+import {IItem, IResponse} from "./types/types";
 
 function App() {
   const [searchResults, setSearchResults] = useState<IItem[]>([]);

@@ -1,11 +1,4 @@
-import { IItem } from '../components/item-details/ItemDetails';
-
-export interface IResponse {
-  count: number;
-  next: string;
-  previous: string;
-  results: IItem[];
-}
+import { IItem, IResponse } from '../types/types';
 
 export async function fetchItems(
   searchTerm: string,

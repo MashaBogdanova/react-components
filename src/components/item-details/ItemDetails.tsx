@@ -1,25 +1,7 @@
 import React from 'react';
 import styles from './item-details.module.css';
 import closeIcon from '../../assets/icon-close.png';
-
-export interface IItem {
-  name: string;
-  height: string;
-  mass: string;
-  hair_color: string;
-  skin_color: string;
-  eye_color: string;
-  birth_year: string;
-  gender: string;
-  homeworld: string;
-  films: string[];
-  species: [];
-  vehicles: string[];
-  starships: string[];
-  created: string;
-  edited: string;
-  url: string;
-}
+import {IItem} from "../../types/types";
 
 interface IProps {
   item: IItem;

@@ -1,13 +1,19 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
-import SearchForm from './components/search-form/SearchForm';
-import Pagination from './components/pagination/Pagination';
-import Items from './components/items/Items';
-import styles from './App.module.css';
-import ItemDetails from './components/item-details/ItemDetails';
-import Preloader from './components/preloader/Preloader';
+import React, { ChangeEvent, createContext, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import SearchForm from './components/search-form/SearchForm';
+import Items from './components/items/Items';
+import ItemDetails from './components/item-details/ItemDetails';
+import Pagination from './components/pagination/Pagination';
+import Preloader from './components/preloader/Preloader';
 import { fetchCurrentItem, fetchItems } from './api/api';
-import {IItem, IResponse} from "./types/types";
+import { IItem, IResponse } from './types/types';
+import styles from './App.module.css';
+
+export const ItemsContext = createContext({
+  searchResults: [],
+  item: {},
+  searchTerm: '',
+});
 
 function App() {
   const [searchResults, setSearchResults] = useState<IItem[]>([]);
@@ -16,6 +22,7 @@ function App() {
   const [wasItemsLoaded, setItemsLoaded] = useState<boolean>(false);
   const [wasItemLoaded, setItemLoaded] = useState<boolean>(false);
   const [isError, setError] = useState<boolean>(false);
+
   const [searchTerm, setSearchTerm] = useState<string>(
     localStorage.getItem('searchTerm') || ''
   );
@@ -25,7 +32,7 @@ function App() {
   const [nextUrl, setNextUrl] = useState<string | null>(
     localStorage.getItem('nextUrl') || null
   );
-  const [currentPage, setCurrentPage] = useState<number>(
+  const [currentPageNumber, setCurrentPageNumber] = useState<number>(
     localStorage.getItem('currentPage')
       ? Number(localStorage.getItem('currentPage'))
       : 1
@@ -33,9 +40,9 @@ function App() {
   const [, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    setItems(searchTerm, currentPage);
+    setItems(searchTerm, currentPageNumber);
     // eslint-disable-next-line
-  }, [searchTerm, currentPage]);
+  }, [searchTerm, currentPageNumber]);
 
   async function setItems(
     searchTerm: string,
@@ -55,7 +62,7 @@ function App() {
       setSearchResults(data.results);
       setPrevUrl(data.previous);
       setNextUrl(data.next);
-      setCurrentPage(currentPage);
+      setCurrentPageNumber(currentPage);
       setItemsLoaded(true);
 
       localStorage.setItem('searchTerm', searchTerm);
@@ -69,7 +76,7 @@ function App() {
     setItemShown(true);
     setItemLoaded(false);
     setError(false);
-    setSearchParams(() => `page=${currentPage}&details=${id}`);
+    setSearchParams(() => `page=${currentPageNumber}&details=${id}`);
 
     const data = await fetchCurrentItem(id, setItem);
     if (data) {
@@ -78,12 +85,9 @@ function App() {
     }
   }
 
-  function handleSearch() {
-    setItems(searchTerm, 1);
-  }
-
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     setSearchTerm(event.target.value);
+    setItemShown(false);
     localStorage.setItem('currentPage', event.target.value);
   }
 
@@ -98,46 +102,43 @@ function App() {
   }
 
   return (
-    <main className={styles.main}>
-      <button onClick={() => setError(true)}>Show Error</button>
-      <SearchForm
-        searchTerm={searchTerm}
-        handleInputChange={handleInputChange}
-        handleSearch={handleSearch}
-      />
+    <ItemsContext.Provider value={{ searchResults, item, searchTerm }}>
+      <main className={styles.main}>
+        <button onClick={() => setError(true)}>Show Error</button>
+        <SearchForm
+          handleInputChange={handleInputChange}
+          handleSearch={() => setItems(searchTerm, 1)}
+        />
 
-      {isError ? (
-        <p>Oops... Something went wrong. Reload the page.</p>
-      ) : (
-        <section className={styles.results}>
-          {!wasItemsLoaded ? (
-            <Preloader />
-          ) : (
-            <Items
-              items={searchResults}
-              onItemClick={setCurrentItem}
-              setItemShown={setItemShown}
-            />
-          )}
-
-          {wasItemsLoaded &&
-            isItemShown &&
-            (!wasItemLoaded ? (
+        {isError ? (
+          <p>Oops... Something went wrong. Reload the page.</p>
+        ) : (
+          <section className={styles.results}>
+            {!wasItemsLoaded ? (
               <Preloader />
             ) : (
-              <ItemDetails item={item} setItemShown={setItemShown} />
-            ))}
-        </section>
-      )}
-      {wasItemsLoaded && (
-        <Pagination
-          prevUrl={prevUrl}
-          nextUrl={nextUrl}
-          onPageChange={onPageChange}
-          currentPage={currentPage}
-        />
-      )}
-    </main>
+              <Items onItemClick={setCurrentItem} setItemShown={setItemShown} />
+            )}
+
+            {wasItemsLoaded &&
+              isItemShown &&
+              (!wasItemLoaded ? (
+                <Preloader />
+              ) : (
+                <ItemDetails setItemShown={setItemShown} />
+              ))}
+          </section>
+        )}
+        {wasItemsLoaded && (
+          <Pagination
+            prevUrl={prevUrl}
+            nextUrl={nextUrl}
+            onPageChange={onPageChange}
+            currentPage={currentPageNumber}
+          />
+        )}
+      </main>
+    </ItemsContext.Provider>
   );
 }
 

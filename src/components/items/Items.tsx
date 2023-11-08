@@ -1,21 +1,22 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styles from './items.module.css';
-import {IItem} from "../../types/types";
+import { ItemsContext } from '../../App';
+import { IItem } from '../../types/types';
 
 interface IProps {
-  items: IItem[];
   onItemClick: (url: string) => void;
 }
 
-function Items({ items, onItemClick }: IProps) {
+function Items({ onItemClick }: IProps) {
+  const { searchResults }: IItem[] = useContext(ItemsContext);
   return (
     <article>
       <ul>
-        {items.map((result, index) => (
+        {searchResults.map((result, index) => (
           <li
             className={styles.item}
             key={index}
-            onClick={() => onItemClick(getItemId(items[0].url))}
+            onClick={() => onItemClick(getItemId(searchResults[0].url))}
           >
             {result.name}
           </li>

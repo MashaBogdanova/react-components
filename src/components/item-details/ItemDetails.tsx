@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styles from './item-details.module.css';
 import closeIcon from '../../assets/icon-close.png';
-import {IItem} from "../../types/types";
+import { IItem } from '../../types/types';
+import { ItemsContext } from '../../App';
 
 interface IProps {
-  item: IItem;
   setItemShown: (boolean) => void;
 }
 
-function ItemDetails({ item, setItemShown }: IProps) {
+function ItemDetails({ setItemShown }: IProps) {
+  const { item }: IItem = useContext(ItemsContext);
   return (
     <article className={styles.itemDetails}>
       <ul>

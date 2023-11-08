@@ -6,6 +6,7 @@ import styles from './App.module.css';
 import ItemDetails, { IItem } from './components/item-details/ItemDetails';
 import Preloader from './components/preloader/Preloader';
 import { useSearchParams } from 'react-router-dom';
+import { fetchCurrentItem, fetchItems, IResponse } from './api/api';
 
 function App() {
   const [searchResults, setSearchResults] = useState<IItem[]>([]);
@@ -31,55 +32,53 @@ function App() {
   const [, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    fetchItems(searchTerm, currentPage);
-      // eslint-disable-next-line
+    setItems(searchTerm, currentPage);
+    // eslint-disable-next-line
   }, [searchTerm, currentPage]);
 
-  function fetchItems(searchTerm: string, currentPage: number) {
+  async function setItems(
+    searchTerm: string,
+    currentPage: number
+  ): Promise<void> {
     setItemsLoaded(false);
     setError(false);
     setSearchParams(`page=${currentPage}`);
 
-    fetch(
-      `https://swapi.dev/api/people?search=${searchTerm}&page=${currentPage}`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        setSearchResults(data.results);
-        setPrevUrl(data.previous);
-        setNextUrl(data.next);
-        setCurrentPage(currentPage);
-        setItemsLoaded(true);
+    const data: IResponse | void = await fetchItems(
+      searchTerm,
+      currentPage,
+      setError
+    );
 
-        localStorage.setItem('searchTerm', searchTerm);
-        localStorage.setItem('prevUrl', data.previous);
-        localStorage.setItem('nextUrl', data.next);
-        localStorage.setItem('currentPage', currentPage.toString());
-      })
-      .catch(() => {
-        setError(true);
-      });
+    if (data) {
+      setSearchResults(data.results);
+      setPrevUrl(data.previous);
+      setNextUrl(data.next);
+      setCurrentPage(currentPage);
+      setItemsLoaded(true);
+
+      localStorage.setItem('searchTerm', searchTerm);
+      localStorage.setItem('prevUrl', data.previous);
+      localStorage.setItem('nextUrl', data.next);
+      localStorage.setItem('currentPage', currentPage.toString());
+    }
   }
 
-  function fetchItem(id: string) {
+  async function setCurrentItem(id: string): Promise<void> {
     setItemShown(true);
     setItemLoaded(false);
     setError(false);
     setSearchParams(() => `page=${currentPage}&details=${id}`);
 
-    fetch(`https://swapi.dev/api/people/${id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setItem(data);
-        setItemLoaded(true);
-      })
-      .catch(() => {
-        setError(true);
-      });
+    const data = await fetchCurrentItem(id, setItem);
+    if (data) {
+      setItem(data);
+      setItemLoaded(true);
+    }
   }
 
   function handleSearch() {
-    fetchItems(searchTerm, 1);
+    setItems(searchTerm, 1);
   }
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
@@ -88,7 +87,7 @@ function App() {
   }
 
   function onPageChange(page: number) {
-    fetchItems(searchTerm, page);
+    setItems(searchTerm, page);
     setSearchParams(() => `page=${page}`);
     setItemShown(false);
   }
@@ -115,7 +114,7 @@ function App() {
           ) : (
             <Items
               items={searchResults}
-              onItemClick={fetchItem}
+              onItemClick={setCurrentItem}
               setItemShown={setItemShown}
             />
           )}

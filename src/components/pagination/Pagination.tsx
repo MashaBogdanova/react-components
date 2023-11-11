@@ -10,7 +10,7 @@ interface IProps {
 
 function Pagination({ prevUrl, nextUrl, currentPage, onPageChange }: IProps) {
   return (
-    <article className={styles.pagination}>
+    <article className={styles.pagination} data-testid="pagination">
       <button
         className={styles.button}
         disabled={prevUrl === null}

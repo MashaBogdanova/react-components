@@ -1,34 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styles from './item-details.module.css';
 import closeIcon from '../../assets/icon-close.png';
-
-export interface IItem {
-  name: string;
-  height: string;
-  mass: string;
-  hair_color: string;
-  skin_color: string;
-  eye_color: string;
-  birth_year: string;
-  gender: string;
-  homeworld: string;
-  films: string[];
-  species: [];
-  vehicles: string[];
-  starships: string[];
-  created: string;
-  edited: string;
-  url: string;
-}
+import { IItem } from '../../types/types';
+import { ItemsContext } from '../../App';
 
 interface IProps {
-  item: IItem;
   setItemShown: (boolean) => void;
 }
 
-function ItemDetails({ item, setItemShown }: IProps) {
+function ItemDetails({ setItemShown }: IProps) {
+  const { item }: IItem = useContext(ItemsContext);
   return (
-    <article className={styles.itemDetails}>
+    <article className={styles.itemDetails} data-testid="item-details">
       <ul>
         <li>Name: {item.name}</li>
         <li>Year of Birth: {item.birth_year}</li>
@@ -41,6 +24,7 @@ function ItemDetails({ item, setItemShown }: IProps) {
         onClick={() => setItemShown(false)}
         src={closeIcon}
         alt="close"
+        data-testid="details-close-button"
       />
     </article>
   );

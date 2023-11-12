@@ -1,22 +1,26 @@
-import React, { ChangeEventHandler } from 'react';
+import React, { ChangeEventHandler, useContext } from 'react';
 import styles from './search-form.module.css';
+import { ItemsContext } from '../../App';
 
 interface IProps {
-  searchTerm: string;
   handleInputChange: ChangeEventHandler<HTMLInputElement> | undefined;
   handleSearch: () => void;
 }
 
 function SearchForm(props: IProps) {
+  const { searchTerm } = useContext(ItemsContext);
   return (
-    <section className={styles.items}>
+    <section className={styles.items} data-testid="search-form">
       <input
         type="text"
         placeholder="Search for items"
-        value={props.searchTerm}
+        value={searchTerm}
         onChange={props.handleInputChange}
+        data-testid="search-input"
       />
-      <button onClick={props.handleSearch}>Search</button>
+      <button onClick={props.handleSearch} data-testid="search-button">
+        Search
+      </button>
     </section>
   );
 }

@@ -10,7 +10,7 @@ interface IProps {
 function Items({ onItemClick }: IProps) {
   const { searchResults }: IItem[] = useContext(ItemsContext);
   return (
-    <article>
+    <article data-testid="items">
       <ul>
         {searchResults.map((result, index) => (
           <li

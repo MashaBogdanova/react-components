@@ -88,7 +88,7 @@ function App() {
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     setSearchTerm(event.target.value);
     setItemShown(false);
-    localStorage.setItem('currentPage', event.target.value);
+    localStorage.setItem('searchTerm', event.target.value);
   }
 
   function onPageChange(page: number) {
@@ -103,8 +103,10 @@ function App() {
 
   return (
     <ItemsContext.Provider value={{ searchResults, item, searchTerm }}>
-      <main className={styles.main}>
-        <button onClick={() => setError(true)}>Show Error</button>
+      <main className={styles.main} data-testid="main">
+        <button onClick={() => setError(true)} data-testid="error-button">
+          Show Error
+        </button>
         <SearchForm
           handleInputChange={handleInputChange}
           handleSearch={() => setItems(searchTerm, 1)}

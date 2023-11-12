@@ -11,7 +11,7 @@ interface IProps {
 function ItemDetails({ setItemShown }: IProps) {
   const { item }: IItem = useContext(ItemsContext);
   return (
-    <article className={styles.itemDetails}>
+    <article className={styles.itemDetails} data-testid="item-details">
       <ul>
         <li>Name: {item.name}</li>
         <li>Year of Birth: {item.birth_year}</li>
@@ -24,6 +24,7 @@ function ItemDetails({ setItemShown }: IProps) {
         onClick={() => setItemShown(false)}
         src={closeIcon}
         alt="close"
+        data-testid="details-close-button"
       />
     </article>
   );

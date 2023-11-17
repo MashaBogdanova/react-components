@@ -5,7 +5,7 @@ import { IItem } from '../../types/types';
 import { ItemsContext } from '../../App';
 
 interface IProps {
-  setItemShown: (boolean) => void;
+  setItemShown: (isItemShown: boolean) => void;
 }
 
 function ItemDetails({ setItemShown }: IProps) {

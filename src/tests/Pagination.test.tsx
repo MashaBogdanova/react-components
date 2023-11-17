@@ -36,7 +36,9 @@ describe('Pagination', () => {
       />
     );
 
-    const prevButton = getByTestId('pagination-prev-button');
+    const prevButton = getByTestId(
+      'pagination-prev-button'
+    ) as HTMLButtonElement;
     expect(prevButton.disabled).toBeTruthy();
   });
 
@@ -50,7 +52,9 @@ describe('Pagination', () => {
       />
     );
 
-    const nextButton = getByTestId('pagination-next-button');
+    const nextButton = getByTestId(
+      'pagination-next-button'
+    ) as HTMLButtonElement;
     expect(nextButton.disabled).toBeTruthy();
   });
 

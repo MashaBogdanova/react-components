@@ -8,6 +8,8 @@ import Preloader from './components/preloader/Preloader';
 import { fetchCurrentItem, fetchItems } from './api/api';
 import { IItem, IResponse } from './types/types';
 import styles from './App.module.css';
+import getItems from './redux/thunks/getItemsThunk';
+import { useAppDispatch } from './hooks/hooks';
 
 export const ItemsContext = createContext({
   searchResults: [],
@@ -16,8 +18,10 @@ export const ItemsContext = createContext({
 });
 
 function App() {
+  const dispatch = useAppDispatch();
+
   const [searchResults, setSearchResults] = useState<IItem[]>([]);
-  const [item, setItem] = useState<IItem>(null);
+  const [item, setItem] = useState<IItem | null>(null);
   const [isItemShown, setItemShown] = useState<boolean>(false);
   const [wasItemsLoaded, setItemsLoaded] = useState<boolean>(false);
   const [wasItemLoaded, setItemLoaded] = useState<boolean>(false);
@@ -40,9 +44,9 @@ function App() {
   const [, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    setItems(searchTerm, currentPageNumber);
+    dispatch(getItems(searchTerm, currentPageNumber, setError, setItemsLoaded));
     // eslint-disable-next-line
-  }, [searchTerm, currentPageNumber]);
+  }, []);
 
   async function setItems(
     searchTerm: string,
@@ -52,11 +56,7 @@ function App() {
     setError(false);
     setSearchParams(`page=${currentPage}`);
 
-    const data: IResponse | void = await fetchItems(
-      searchTerm,
-      currentPage,
-      setError
-    );
+    const data: IResponse | void = await fetchItems(searchTerm, currentPage);
 
     if (data) {
       setSearchResults(data.results);

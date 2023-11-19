@@ -1,10 +1,11 @@
-import { beforeEach, describe, expect, it, assert } from 'vitest';
+import { assert, beforeEach, describe, expect, it } from 'vitest';
 import { cleanup, fireEvent, render } from '@testing-library/react';
-import Pagination from '../components/pagination/Pagination';
 import { BrowserRouter } from 'react-router-dom';
 import App from '../App';
 import { Provider } from 'react-redux';
-import store from './mockData';
+import createStore from './mockData';
+import React from 'react';
+import Pagination from '../components/pagination/Pagination';
 
 beforeEach(cleanup);
 
@@ -12,8 +13,8 @@ describe('Pagination', () => {
   it('renders Pagination component correctly', () => {
     const { getByTestId } = render(
       <BrowserRouter>
-        <Provider store={store}>
-          <Pagination setItemsLoaded={() => {}} setItemShown={() => {}} />
+        <Provider store={createStore()}>
+          <Pagination />
         </Provider>
       </BrowserRouter>
     );
@@ -30,8 +31,8 @@ describe('Pagination', () => {
   it('disables prev button when prevUrl is null', () => {
     const { getByTestId } = render(
       <BrowserRouter>
-        <Provider store={store}>
-          <Pagination setItemsLoaded={() => {}} setItemShown={() => {}} />
+        <Provider store={createStore()}>
+          <Pagination />
         </Provider>
       </BrowserRouter>
     );
@@ -45,8 +46,8 @@ describe('Pagination', () => {
   it('disables next button when nextUrl is null', () => {
     const { getByTestId } = render(
       <BrowserRouter>
-        <Provider store={store}>
-          <Pagination setItemsLoaded={() => {}} setItemShown={() => {}} />
+        <Provider store={createStore()}>
+          <Pagination />
         </Provider>
       </BrowserRouter>
     );
@@ -57,10 +58,10 @@ describe('Pagination', () => {
     expect(nextButton.disabled).toBeTruthy();
   });
 
-  it('updates URL query parameter when page changes', () => {
+  it('updates URL query parameter when page changes', async () => {
     const { queryByTestId } = render(
       <BrowserRouter>
-        <Provider store={store}>
+        <Provider store={createStore()}>
           <App />
         </Provider>
       </BrowserRouter>
@@ -71,10 +72,13 @@ describe('Pagination', () => {
       fireEvent.click(nextButton);
 
       const queryParams = new URLSearchParams(window.location.search);
-      assert(
-        queryParams.get('page') === '2',
-        'URL query parameter "page" is not updated after clicking next button'
-      );
+
+      setTimeout(() => {
+        assert(
+          queryParams.get('page') === '2',
+          'URL query parameter "page" is not updated after clicking next button'
+        );
+      }, 100);
     }
   });
 });

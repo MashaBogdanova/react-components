@@ -2,13 +2,13 @@ import { assert, beforeEach, describe, expect, it } from 'vitest';
 import { cleanup, render } from '@testing-library/react';
 import Items from '../components/items/Items';
 import { Provider } from 'react-redux';
-import store, { initialState } from './mockData';
+import createStore, { createInitialState } from './mockData';
 
 beforeEach(cleanup);
 describe('Items', () => {
   it('renders Items component correctly', () => {
     const { getByTestId } = render(
-      <Provider store={store}>
+      <Provider store={createStore()}>
         <Items onItemClick={() => {}} />
       </Provider>
     );
@@ -18,7 +18,7 @@ describe('Items', () => {
 
   it('renders the specified number of items', () => {
     const { getByTestId } = render(
-      <Provider store={store}>
+      <Provider store={createStore()}>
         <Items onItemClick={() => {}} />
       </Provider>
     );
@@ -27,8 +27,10 @@ describe('Items', () => {
     const cardElements = itemsContainer.querySelectorAll('li');
 
     assert(
-      cardElements.length === initialState.items.itemsData.length,
-      `Expected ${initialState.items.itemsData.length} items, but found ${cardElements.length}`
+      cardElements.length === createInitialState().items.itemsData.length,
+      `Expected ${
+        createInitialState().items.itemsData.length
+      } items, but found ${cardElements.length}`
     );
   });
 });

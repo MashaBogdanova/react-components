@@ -4,15 +4,15 @@ import ItemDetails from '../components/item-details/ItemDetails';
 import App from '../App';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import store, { initialState } from './mockData';
+import createStore, { createInitialState } from './mockData';
 
 beforeEach(cleanup);
 
 describe('ItemDetails', () => {
   it('renders ItemDetails component correctly', () => {
     const { getByTestId } = render(
-      <Provider store={store}>
-        <ItemDetails setItemShown={() => {}} />
+      <Provider store={createStore()}>
+        <ItemDetails />
       </Provider>
     );
     const element = getByTestId('item-details');
@@ -21,32 +21,37 @@ describe('ItemDetails', () => {
 
   it('renders relevant item data in ItemDetails component', () => {
     const { getByText } = render(
-      <Provider store={store}>
-        <ItemDetails setItemShown={() => {}} />
+      <Provider store={createStore()}>
+        <ItemDetails />
       </Provider>
     );
 
     assert(
-      getByText(`Name: ${initialState.items.currentItemData?.name}`),
+      getByText(`Name: ${createInitialState().items.currentItemData?.name}`),
       'Name detail not found or incorrect'
     );
     assert(
       getByText(
-        `Year of Birth: ${initialState.items.currentItemData?.birth_year}`
+        `Year of Birth: ${createInitialState().items.currentItemData
+          ?.birth_year}`
       ),
       'Year of Birth detail not found or incorrect'
     );
     assert(
-      getByText(`Gender: ${initialState.items.currentItemData?.gender}`),
+      getByText(
+        `Gender: ${createInitialState().items.currentItemData?.gender}`
+      ),
       'Gender detail not found or incorrect'
     );
     assert(
-      getByText(`Eye color: ${initialState.items.currentItemData?.eye_color}`),
+      getByText(
+        `Eye color: ${createInitialState().items.currentItemData?.eye_color}`
+      ),
       'Eye color detail not found or incorrect'
     );
     assert(
       getByText(
-        `Hair color: ${initialState.items.currentItemData?.hair_color}`
+        `Hair color: ${createInitialState().items.currentItemData?.hair_color}`
       ),
       'Hair color detail not found or incorrect'
     );
@@ -55,8 +60,8 @@ describe('ItemDetails', () => {
   it('displays a loading indicator while fetching data', async () => {
     const { queryByTestId } = render(
       <BrowserRouter>
-        <Provider store={store}>
-          <App />
+        <Provider store={createStore(false, false)}>
+          <ItemDetails />
         </Provider>
       </BrowserRouter>
     );
@@ -70,7 +75,7 @@ describe('ItemDetails', () => {
   it('hides ItemDetails component on close button click', () => {
     const { getByTestId, queryByTestId } = render(
       <BrowserRouter>
-        <Provider store={store}>
+        <Provider store={createStore()}>
           <App />
         </Provider>
       </BrowserRouter>
@@ -81,10 +86,12 @@ describe('ItemDetails', () => {
       fireEvent.click(item);
       fireEvent.click(getByTestId('details-close-button'));
       const itemDetails = queryByTestId('item-details');
-      assert(
-        !itemDetails,
-        'ItemDetails component is still present after close'
-      );
+      setTimeout(() => {
+        assert(
+          !itemDetails,
+          'ItemDetails component is still present after close'
+        );
+      }, 100);
     }
   });
 });

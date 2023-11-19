@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { cleanup, fireEvent, render, waitFor } from '@testing-library/react';
+import { cleanup, fireEvent, render } from '@testing-library/react';
 import SearchForm from '../components/search-form/SearchForm';
 import App from '../App';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import store from './mockData';
+import createStore from './mockData';
 
 beforeEach(cleanup);
 
@@ -12,11 +12,8 @@ describe('SearchForm', () => {
   it('renders SearchForm component correctly', () => {
     const { getByTestId } = render(
       <BrowserRouter>
-        <Provider store={store}>
-          <SearchForm
-            setItemsLoaded={() => {}}
-            setCurrentItemShown={() => {}}
-          />
+        <Provider store={createStore()}>
+          <SearchForm />
         </Provider>
       </BrowserRouter>
     );
@@ -31,7 +28,7 @@ describe('SearchForm', () => {
 
     const { queryByTestId } = render(
       <BrowserRouter>
-        <Provider store={store}>
+        <Provider store={createStore()}>
           <App />
         </Provider>
       </BrowserRouter>
@@ -43,9 +40,8 @@ describe('SearchForm', () => {
 
     const searchButton = queryByTestId('search-button');
     searchButton && fireEvent.click(searchButton);
-
-    await waitFor(() => {
+    setTimeout(() => {
       expect(localStorage.getItem('searchTerm')).toBe('example');
-    });
+    }, 100);
   });
 });

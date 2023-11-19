@@ -8,11 +8,11 @@ interface IProps {
 }
 
 function Items({ onItemClick }: IProps) {
-  const searchResults: IItem[] = useAppSelector((state) => state.items.data);
+  const iItems: IItem[] = useAppSelector((state) => state.items.itemsData);
   return (
     <article data-testid="items">
       <ul>
-        {searchResults.map((result) => (
+        {iItems.map((result) => (
           <li
             className={styles.item}
             key={result.name}

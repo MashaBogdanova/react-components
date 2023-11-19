@@ -1,5 +1,4 @@
 import { fetchItems } from '../../api/api';
-
 import { IResponse } from '../../types/types';
 import { DispatchType } from '../store';
 import { setAllItems } from '../slices/itemsSlice';
@@ -8,19 +7,28 @@ const getItems =
   (
     searchTerm: string,
     currentPage: number,
-    setError: (isError: boolean) => void,
-    setItemsLoaded: (isItemLoaded: boolean) => void
+    setItemsLoaded: (isItemLoaded: boolean) => void,
+    setSearchParams: (searchTerm: string) => void
   ) =>
   async (dispatch: DispatchType) => {
+    setItemsLoaded(false);
     try {
       const response: IResponse | void = await fetchItems(
         searchTerm,
         currentPage
       );
       response && dispatch(setAllItems(response.results));
+      setSearchParams(`page=${currentPage}`);
       setItemsLoaded(true);
+
+      if(response) {
+        localStorage.setItem('searchTerm', searchTerm);
+        localStorage.setItem('prevUrl', response.previous);
+        localStorage.setItem('nextUrl', response.next);
+        localStorage.setItem('currentPage', currentPage.toString());
+      }
     } catch (e) {
-      setError(true);
+      throw new Error('Generated error');
     }
   };
 

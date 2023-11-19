@@ -1,13 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { ISearchParamsState } from '../../types/types';
 
-export interface IInitialState {
-  searchTerm: string;
-  currentPageNumber: number;
-  prevUrl: string | null;
-  nextUrl: string | null;
-}
-
-const initialState: IInitialState = {
+const initialState: ISearchParamsState = {
   searchTerm: localStorage.getItem('searchTerm') || '',
   currentPageNumber: localStorage.getItem('currentPage')
     ? Number(localStorage.getItem('currentPage'))

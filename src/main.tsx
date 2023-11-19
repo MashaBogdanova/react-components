@@ -1,6 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import {
+  createBrowserRouter,
+  RouteObject,
+  RouterProvider,
+} from 'react-router-dom';
 import App from './App';
 import './index.css';
 import RouterError from './components/router-error/RouterError';
@@ -8,7 +12,7 @@ import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import ErrorBoundary from './components/error-boundary/ErrorBoundary';
 
-const router = createBrowserRouter([
+export const appRoutes: Array<RouteObject> = [
   {
     path: '/',
     element: (
@@ -20,7 +24,9 @@ const router = createBrowserRouter([
     ),
     errorElement: <RouterError />,
   },
-]);
+];
+
+const router = createBrowserRouter(appRoutes);
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <RouterProvider router={router} />

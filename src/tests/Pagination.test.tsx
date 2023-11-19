@@ -3,18 +3,19 @@ import { cleanup, fireEvent, render } from '@testing-library/react';
 import Pagination from '../components/pagination/Pagination';
 import { BrowserRouter } from 'react-router-dom';
 import App from '../App';
+import { Provider } from 'react-redux';
+import store from './mockData';
 
 beforeEach(cleanup);
 
 describe('Pagination', () => {
   it('renders Pagination component correctly', () => {
     const { getByTestId } = render(
-      <Pagination
-        prevUrl="/prev"
-        nextUrl="/next"
-        currentPage={1}
-        onPageChange={() => {}}
-      />
+      <BrowserRouter>
+        <Provider store={store}>
+          <Pagination setItemsLoaded={() => {}} setItemShown={() => {}} />
+        </Provider>
+      </BrowserRouter>
     );
 
     const element = getByTestId('pagination');
@@ -28,12 +29,11 @@ describe('Pagination', () => {
 
   it('disables prev button when prevUrl is null', () => {
     const { getByTestId } = render(
-      <Pagination
-        prevUrl={null}
-        nextUrl="/next"
-        currentPage={1}
-        onPageChange={() => {}}
-      />
+      <BrowserRouter>
+        <Provider store={store}>
+          <Pagination setItemsLoaded={() => {}} setItemShown={() => {}} />
+        </Provider>
+      </BrowserRouter>
     );
 
     const prevButton = getByTestId(
@@ -44,12 +44,11 @@ describe('Pagination', () => {
 
   it('disables next button when nextUrl is null', () => {
     const { getByTestId } = render(
-      <Pagination
-        prevUrl="/prev"
-        nextUrl={null}
-        currentPage={1}
-        onPageChange={() => {}}
-      />
+      <BrowserRouter>
+        <Provider store={store}>
+          <Pagination setItemsLoaded={() => {}} setItemShown={() => {}} />
+        </Provider>
+      </BrowserRouter>
     );
 
     const nextButton = getByTestId(
@@ -61,7 +60,9 @@ describe('Pagination', () => {
   it('updates URL query parameter when page changes', () => {
     const { queryByTestId } = render(
       <BrowserRouter>
-        <App />
+        <Provider store={store}>
+          <App />
+        </Provider>
       </BrowserRouter>
     );
 

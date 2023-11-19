@@ -1,56 +1,53 @@
 import { beforeEach, describe, expect, it, assert } from 'vitest';
 import { cleanup, fireEvent, render, waitFor } from '@testing-library/react';
 import ItemDetails from '../components/item-details/ItemDetails';
-import App, { ItemsContext } from '../App';
-import { IItem } from '../types/types';
+import App from '../App';
 import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import store, { initialState } from './mockData';
 
 beforeEach(cleanup);
 
 describe('ItemDetails', () => {
   it('renders ItemDetails component correctly', () => {
-    const { getByTestId } = render(<ItemDetails setItemShown={() => {}} />);
-
+    const { getByTestId } = render(
+      <Provider store={store}>
+        <ItemDetails setItemShown={() => {}} />
+      </Provider>
+    );
     const element = getByTestId('item-details');
-
     expect(element).toBeTruthy();
   });
 
   it('renders relevant item data in ItemDetails component', () => {
-    const mockItem: IItem = {
-      name: 'Luke Skywalker',
-      birth_year: '19 BBY',
-      gender: 'Male',
-      eye_color: 'Blue',
-      hair_color: 'Blond',
-    };
-
     const { getByText } = render(
-      <ItemsContext.Provider
-        value={{ item: mockItem, searchTerm: '', searchResults: [] }}
-      >
+      <Provider store={store}>
         <ItemDetails setItemShown={() => {}} />
-      </ItemsContext.Provider>
+      </Provider>
     );
 
     assert(
-      getByText(`Name: ${mockItem.name}`),
+      getByText(`Name: ${initialState.items.currentItemData?.name}`),
       'Name detail not found or incorrect'
     );
     assert(
-      getByText(`Year of Birth: ${mockItem.birth_year}`),
+      getByText(
+        `Year of Birth: ${initialState.items.currentItemData?.birth_year}`
+      ),
       'Year of Birth detail not found or incorrect'
     );
     assert(
-      getByText(`Gender: ${mockItem.gender}`),
+      getByText(`Gender: ${initialState.items.currentItemData?.gender}`),
       'Gender detail not found or incorrect'
     );
     assert(
-      getByText(`Eye color: ${mockItem.eye_color}`),
+      getByText(`Eye color: ${initialState.items.currentItemData?.eye_color}`),
       'Eye color detail not found or incorrect'
     );
     assert(
-      getByText(`Hair color: ${mockItem.hair_color}`),
+      getByText(
+        `Hair color: ${initialState.items.currentItemData?.hair_color}`
+      ),
       'Hair color detail not found or incorrect'
     );
   });
@@ -58,7 +55,9 @@ describe('ItemDetails', () => {
   it('displays a loading indicator while fetching data', async () => {
     const { queryByTestId } = render(
       <BrowserRouter>
-        <App />
+        <Provider store={store}>
+          <App />
+        </Provider>
       </BrowserRouter>
     );
 
@@ -71,7 +70,9 @@ describe('ItemDetails', () => {
   it('hides ItemDetails component on close button click', () => {
     const { getByTestId, queryByTestId } = render(
       <BrowserRouter>
-        <App />
+        <Provider store={store}>
+          <App />
+        </Provider>
       </BrowserRouter>
     );
 

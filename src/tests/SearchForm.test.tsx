@@ -3,13 +3,22 @@ import { cleanup, fireEvent, render, waitFor } from '@testing-library/react';
 import SearchForm from '../components/search-form/SearchForm';
 import App from '../App';
 import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import store from './mockData';
 
 beforeEach(cleanup);
 
 describe('SearchForm', () => {
   it('renders SearchForm component correctly', () => {
     const { getByTestId } = render(
-      <SearchForm handleInputChange={() => {}} handleSearch={() => {}} />
+      <BrowserRouter>
+        <Provider store={store}>
+          <SearchForm
+            setItemsLoaded={() => {}}
+            setCurrentItemShown={() => {}}
+          />
+        </Provider>
+      </BrowserRouter>
     );
 
     const element = getByTestId('search-form');
@@ -22,7 +31,9 @@ describe('SearchForm', () => {
 
     const { queryByTestId } = render(
       <BrowserRouter>
-        <App />
+        <Provider store={store}>
+          <App />
+        </Provider>
       </BrowserRouter>
     );
 

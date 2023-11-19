@@ -21,7 +21,7 @@ const getItems =
       setSearchParams(`page=${currentPage}`);
       setItemsLoaded(true);
 
-      if(response) {
+      if (response) {
         localStorage.setItem('searchTerm', searchTerm);
         localStorage.setItem('prevUrl', response.previous);
         localStorage.setItem('nextUrl', response.next);

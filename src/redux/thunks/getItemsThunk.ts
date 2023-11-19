@@ -2,6 +2,10 @@ import { fetchItems } from '../../api/api';
 import { IResponse } from '../../types/types';
 import { DispatchType } from '../store';
 import { setAllItems } from '../slices/itemsSlice';
+import {
+  setNextUrl,
+  setPrevUrl,
+} from '../slices/searchParamsSlice';
 
 const getItems =
   (
@@ -17,7 +21,11 @@ const getItems =
         searchTerm,
         currentPage
       );
-      response && dispatch(setAllItems(response.results));
+      if (response) {
+        dispatch(setAllItems(response.results));
+        dispatch(setPrevUrl(response.previous));
+        dispatch(setNextUrl(response.next));
+      }
       setSearchParams(`page=${currentPage}`);
       setItemsLoaded(true);
 

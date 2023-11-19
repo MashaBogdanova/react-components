@@ -2,17 +2,23 @@ import React from 'react';
 import styles from './item-details.module.css';
 import closeIcon from '../../assets/icon-close.png';
 import { IItem } from '../../types/types';
-import { useAppSelector } from '../../hooks/hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import Preloader from '../preloader/Preloader';
+import { setCurrentItemShown } from '../../redux/slices/itemsSlice';
 
-interface IProps {
-  setItemShown: (isItemShown: boolean) => void;
-}
-
-function ItemDetails({ setItemShown }: IProps) {
+function ItemDetails() {
+  const wasItemsLoaded = useAppSelector((state) => state.items.wasItemsLoaded);
+  const wasCurrentItemLoaded = useAppSelector(
+    (state) => state.items.wasCurrentItemLoaded
+  );
   const item: IItem | null = useAppSelector(
     (state) => state.items.currentItemData
   );
-  return (
+  const dispatch = useAppDispatch();
+
+  return !wasItemsLoaded && !wasCurrentItemLoaded ? (
+    <Preloader />
+  ) : (
     <article className={styles.itemDetails} data-testid="item-details">
       <ul>
         <li>Name: {item?.name}</li>
@@ -23,7 +29,7 @@ function ItemDetails({ setItemShown }: IProps) {
       </ul>
       <img
         className={styles.closeIcon}
-        onClick={() => setItemShown(false)}
+        onClick={() => dispatch(setCurrentItemShown(false))}
         src={closeIcon}
         alt="close"
         data-testid="details-close-button"

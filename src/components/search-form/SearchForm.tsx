@@ -3,36 +3,23 @@ import styles from './search-form.module.css';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { setSearchTerm } from '../../redux/slices/searchParamsSlice';
 import getItems from '../../redux/thunks/getItemsThunk';
-import { useSearchParams } from 'react-router-dom';
+import { setCurrentItemShown } from '../../redux/slices/itemsSlice';
 
-interface IProps {
-  setCurrentItemShown: (isItemShown: boolean) => void;
-  setItemsLoaded: (wasItemsLoaded: boolean) => void;
-}
-
-function SearchForm({ setCurrentItemShown, setItemsLoaded }: IProps) {
+function SearchForm() {
   const currentPageNumber = useAppSelector(
     (state) => state.searchParams.currentPageNumber
   );
   const searchTerm = useAppSelector((state) => state.searchParams.searchTerm);
   const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm);
   const dispatch = useAppDispatch();
-  const [, setSearchParams] = useSearchParams();
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setLocalSearchTerm(e.target.value);
-    setCurrentItemShown(false);
+    dispatch(setCurrentItemShown(false));
   };
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     dispatch(setSearchTerm(localSearchTerm));
-    dispatch(
-      getItems(
-        localSearchTerm,
-        currentPageNumber,
-        setItemsLoaded,
-        setSearchParams
-      )
-    );
+    dispatch(getItems(localSearchTerm, currentPageNumber));
   };
   return (
     <section data-testid="search-form">

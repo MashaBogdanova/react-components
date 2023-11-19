@@ -1,21 +1,17 @@
 import { fetchItems } from '../../api/api';
 import { IResponse } from '../../types/types';
 import { DispatchType } from '../store';
-import { setAllItems } from '../slices/itemsSlice';
+import { setAllItems, setItemsLoaded } from '../slices/itemsSlice';
 import {
+  setCurrentPage,
   setNextUrl,
   setPrevUrl,
 } from '../slices/searchParamsSlice';
 
 const getItems =
-  (
-    searchTerm: string,
-    currentPage: number,
-    setItemsLoaded: (isItemLoaded: boolean) => void,
-    setSearchParams: (searchTerm: string) => void
-  ) =>
+  (searchTerm: string, currentPage: number) =>
   async (dispatch: DispatchType) => {
-    setItemsLoaded(false);
+    dispatch(setItemsLoaded(false));
     try {
       const response: IResponse | void = await fetchItems(
         searchTerm,
@@ -25,9 +21,9 @@ const getItems =
         dispatch(setAllItems(response.results));
         dispatch(setPrevUrl(response.previous));
         dispatch(setNextUrl(response.next));
+        dispatch(setCurrentPage(currentPage));
       }
-      setSearchParams(`page=${currentPage}`);
-      setItemsLoaded(true);
+      dispatch(setItemsLoaded(true));
 
       if (response) {
         localStorage.setItem('searchTerm', searchTerm);

@@ -1,23 +1,33 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import {
+  createBrowserRouter,
+  RouteObject,
+  RouterProvider,
+} from 'react-router-dom';
 import App from './App';
-import ErrorBoundary from './components/error-boundary/ErrorBoundary';
 import './index.css';
 import RouterError from './components/router-error/RouterError';
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
+import ErrorBoundary from './components/error-boundary/ErrorBoundary';
 
-const router = createBrowserRouter([
+export const appRoutes: Array<RouteObject> = [
   {
     path: '/',
     element: (
-      <ErrorBoundary>
-        <App />
-      </ErrorBoundary>
+      <Provider store={store}>
+        <ErrorBoundary>
+          <App />
+        </ErrorBoundary>
+      </Provider>
     ),
     errorElement: <RouterError />,
   },
-]);
+];
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+const router = createBrowserRouter(appRoutes);
+
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <RouterProvider router={router} />
 );

@@ -1,39 +1,36 @@
-import { beforeEach, describe, expect, it, assert } from 'vitest';
+import { assert, beforeEach, describe, expect, it } from 'vitest';
 import { cleanup, render } from '@testing-library/react';
 import Items from '../components/items/Items';
-import { ItemsContext } from '../App';
+import { Provider } from 'react-redux';
+import createStore, { createInitialState } from './mockData';
 
 beforeEach(cleanup);
 describe('Items', () => {
   it('renders Items component correctly', () => {
-    const { getByTestId } = render(<Items onItemClick={() => {}} />);
-
+    const { getByTestId } = render(
+      <Provider store={createStore()}>
+        <Items onItemClick={() => {}} />
+      </Provider>
+    );
     const element = getByTestId('items');
-
     expect(element).toBeTruthy();
   });
 
   it('renders the specified number of items', () => {
-    const mockItems = [
-      { name: 'Item 1', url: '/item/1' },
-      { name: 'Item 2', url: '/item/2' },
-      { name: 'Item 3', url: '/item/3' },
-    ];
-
     const { getByTestId } = render(
-      <ItemsContext.Provider
-        value={{ searchResults: mockItems, item: {}, searchTerm: '' }}
-      >
+      <Provider store={createStore()}>
         <Items onItemClick={() => {}} />
-      </ItemsContext.Provider>
+      </Provider>
     );
 
     const itemsContainer = getByTestId('items');
     const cardElements = itemsContainer.querySelectorAll('li');
 
     assert(
-      cardElements.length === mockItems.length,
-      `Expected ${mockItems.length} items, but found ${cardElements.length}`
+      cardElements.length === createInitialState().items.itemsData.length,
+      `Expected ${
+        createInitialState().items.itemsData.length
+      } items, but found ${cardElements.length}`
     );
   });
 });

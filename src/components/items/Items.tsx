@@ -1,22 +1,26 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styles from './items.module.css';
-import { ItemsContext } from '../../App';
 import { IItem } from '../../types/types';
+import { useAppSelector } from '../../hooks/hooks';
+import Preloader from '../preloader/Preloader';
 
 interface IProps {
   onItemClick: (url: string) => void;
 }
 
 function Items({ onItemClick }: IProps) {
-  const { searchResults }: IItem[] = useContext(ItemsContext);
-  return (
+  const wasItemsLoaded = useAppSelector((state) => state.items.wasItemsLoaded);
+  const iItems: IItem[] = useAppSelector((state) => state.items.itemsData);
+  return !wasItemsLoaded ? (
+    <Preloader />
+  ) : (
     <article data-testid="items">
       <ul>
-        {searchResults.map((result, index) => (
+        {iItems.map((result) => (
           <li
             className={styles.item}
-            key={index}
-            onClick={() => onItemClick(getItemId(searchResults[0].url))}
+            key={result.name}
+            onClick={() => onItemClick(getItemId(result.url as string))}
           >
             {result.name}
           </li>
@@ -26,9 +30,9 @@ function Items({ onItemClick }: IProps) {
   );
 }
 
-function getItemId(url: string) {
+function getItemId(url: string): string {
   const match = url.match(/\d+/);
-  return match && match[0];
+  return match![0];
 }
 
 export default Items;

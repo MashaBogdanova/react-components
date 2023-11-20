@@ -1,8 +1,13 @@
 import React from 'react';
 import { useRouteError } from 'react-router-dom';
 
+interface IError {
+  statusText?: string;
+  message?: string;
+}
+
 function RouterError() {
-  const error = useRouteError();
+  const error = useRouteError() as IError;
   return (
     <section data-testid="404-error">
       <h1>Oops!</h1>

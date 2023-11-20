@@ -23,3 +23,10 @@ export interface IResponse {
   previous: string;
   results: IItem[];
 }
+
+export interface ISearchParamsState {
+  searchTerm: string;
+  currentPageNumber: number;
+  prevUrl: string | null;
+  nextUrl: string | null;
+}

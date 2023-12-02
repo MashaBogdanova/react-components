@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { boolean } from 'yup';
 
 interface IFile {
   lastModified: number;
@@ -7,6 +8,7 @@ interface IFile {
   size: number;
   type: string;
 }
+
 interface IData {
   age: number;
   agreement: boolean;
@@ -21,12 +23,14 @@ interface IData {
 interface IInitialState {
   data: IData | null;
   RHFData: IData | null;
+  wasDataAdded: boolean;
 }
 
 const initialState: IInitialState = {
   data: null,
   RHFData: null,
-}
+  wasDataAdded: false,
+};
 
 const formDataSlice = createSlice({
   name: 'formData',
@@ -38,8 +42,11 @@ const formDataSlice = createSlice({
     setRHFData: (state, action) => {
       state.RHFData = action.payload;
     },
+    setDataAdded: (state, action) => {
+      state.wasDataAdded = action.payload;
+    },
   },
 });
 
-export const { setData, setRHFData } = formDataSlice.actions;
+export const { setData, setRHFData, setDataAdded } = formDataSlice.actions;
 export default formDataSlice.reducer;

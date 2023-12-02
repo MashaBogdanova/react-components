@@ -1,5 +1,8 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import styles from './Forms.module.css';
+import {setData, setRHFData} from '../redux/formDataSlice';
+import { useAppDispatch } from '../redux/hooks';
+import { useNavigate } from 'react-router-dom';
 
 type Inputs = {
   name: string;
@@ -19,9 +22,15 @@ export default function ReactHookForm() {
     watch,
     formState: { errors },
   } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-  console.log(watch('avatar')); // watch input value by passing the name of it
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    console.log(data);
+    const formData = { ...data, avatar: data.avatar[0].name };
+    dispatch(setRHFData(formData));
+    navigate('/');
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
@@ -102,9 +111,9 @@ export default function ReactHookForm() {
       </fieldset>
       <fieldset className={styles.form__fieldset}>
         <label>Female</label>
-        <input type="radio" {...register('gender')} checked />
+        <input type="radio" value="female" {...register('gender')} checked />
         <label>Male</label>
-        <input type="radio" {...register('gender')} />
+        <input type="radio" value="male" {...register('gender')} />
       </fieldset>
       <fieldset className={styles.form__fieldset}>
         <label>Your avatar</label>
@@ -129,7 +138,10 @@ export default function ReactHookForm() {
         <input type="checkbox" {...register('agreement', { required: true })} />
         {errors.agreement && <span>This field is required.</span>}
       </fieldset>
-      <input type="submit" />
+      <fieldset className={styles.form__fieldset}>
+        <input type="submit" />
+        <input type="reset" />
+      </fieldset>
     </form>
   );
 }

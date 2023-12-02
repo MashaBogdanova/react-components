@@ -24,7 +24,7 @@ function UncontrolledForm() {
       </fieldset>
       <fieldset className={styles.form__fieldset}>
         <label htmlFor="female">Female</label>
-        <input type="radio" id="female" name="gender" checked/>
+        <input type="radio" id="female" name="gender" checked />
         <label htmlFor="male">Male</label>
         <input type="radio" id="male" name="gender" />
       </fieldset>
@@ -36,7 +36,10 @@ function UncontrolledForm() {
         <input type="checkbox" id="agreement" />
         <label htmlFor="agreement">I agree with terms and conditions</label>
       </fieldset>
-      <button type="submit">Submit</button>
+      <fieldset className={styles.form__fieldset}>
+        <button type="submit">Submit</button>
+        <button type="reset">Reset</button>
+      </fieldset>
     </form>
   );
 }

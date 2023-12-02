@@ -13,14 +13,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-
-a:hover {
-  color: #535bf2;
+li {
+  list-style: none;
+  text-align: left;
 }
 
 body {
@@ -37,7 +32,7 @@ h1 {
 }
 
 button {
-  margin: 0 8px;
+  margin: 0 20px;
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
@@ -77,4 +72,9 @@ img {
   button {
     background-color: #f9f9f9;
   }
+}
+
+p {
+  font-size: 13px;
+  letter-spacing: -.3px;
 }

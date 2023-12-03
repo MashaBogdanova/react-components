@@ -15,11 +15,9 @@ function FormData({ isRHF }: { isRHF?: boolean }) {
       <li>Name: {formData?.name}</li>
       <li>Age: {formData?.age}</li>
       <li>E-mail: {formData?.email}</li>
-      <li>Password: {formData?.password}</li>
       <li>Gender: {formData?.gender}</li>
 
-
-        {/*{file}*/}
+      {/*{file}*/}
     </ul>
   );
 }

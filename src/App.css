@@ -1,0 +1,33 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.main__buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.button_link {
+  font-weight: 300;
+  color: #535bf2;
+  text-decoration: underline dotted 1px;
+  text-underline-offset: 5px;
+  background-color: transparent;
+  border: none;
+}
+
+.button_link:hover {
+  color: #747bff;
+}
+
+.button_link:focus{
+  outline: none;
+}
+
+.button__wrapper {
+  display: flex;
+  flex-direction: column;
+}

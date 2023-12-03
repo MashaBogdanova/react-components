@@ -4,10 +4,19 @@
   justify-content: space-between;
   gap: 1em;
 }
+.form__block {
+  border: 1px dotted #9a9a9a;
+  padding: 1em;
+}
 
 .form__fieldset {
   display: flex;
   gap: 1em;
-  padding: 1em;
-  border: 1px dotted #9a9a9a;
+  padding-bottom: 1em;
+}
+
+.form__error {
+  text-align: left;
+  font-size: 12px;
+  color: rgba(255, 0, 0, 0.38);
 }

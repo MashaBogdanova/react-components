@@ -1,27 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-
-interface IFile {
-  lastModified: number;
-  lastModifiedDate: Date;
-  name: string;
-  size: number;
-  type: string;
-}
-
-interface IData {
-  age: number;
-  agreement: boolean;
-  avatar: string;
-  email: string;
-  gender: 'female' | 'male';
-  name: string;
-  password: string;
-  repeatPassword: string;
-}
+import { IInputs } from '../types/types';
 
 interface IInitialState {
-  data: IData | null;
-  RHFData: IData | null;
+  data: IInputs[] | null;
+  RHFData: IInputs[] | null;
   wasDataAdded: boolean;
 }
 
@@ -36,10 +18,10 @@ const formDataSlice = createSlice({
   initialState,
   reducers: {
     setData: (state, action) => {
-      state.data = action.payload;
+      state.data?.push(action.payload);
     },
     setRHFData: (state, action) => {
-      state.RHFData = action.payload;
+      state.RHFData?.push(action.payload);
     },
     setDataAdded: (state, action) => {
       state.wasDataAdded = action.payload;

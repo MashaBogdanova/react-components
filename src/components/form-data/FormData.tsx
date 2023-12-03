@@ -19,6 +19,7 @@ function FormData() {
           <li>Password: {data?.password}</li>
           <li>E-mail: {data?.email}</li>
           <li>Gender: {data?.gender}</li>
+          <li>Country: {data?.country}</li>
         </ul>
       );
     })

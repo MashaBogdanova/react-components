@@ -1,4 +1,4 @@
-import { boolean, number, object, ref, string } from 'yup';
+import { number, object, ref, string } from 'yup';
 
 const schema = object().shape({
   name: string()

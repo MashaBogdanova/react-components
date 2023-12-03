@@ -12,7 +12,6 @@ export default function ReactHookForm() {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
   const dispatch = useAppDispatch();

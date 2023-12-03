@@ -7,6 +7,7 @@ export interface IInputs {
   gender: string;
   country: string;
   agreement: string;
+  avatar?: string;
 }
 
 export interface IErrors {

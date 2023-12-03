@@ -1,4 +1,4 @@
-import { boolean, number, object, string } from 'yup';
+import {boolean, number, object, ref, string} from 'yup';
 
 const schema = object().shape({
   name: string()
@@ -28,11 +28,11 @@ const schema = object().shape({
           'Please enter a valid Password. Ensure it contains 1 number, 1 uppercased letter, 1 lowercased letter, 1 special character',
       }
     ),
-  repeatPassword: string().required('Please repeat the password'),
+  repeatPassword: string().required('Please repeat the password').oneOf([ref('password'), ''], "Passwords don't match. Please try again"),
   gender: string().required('Choose one of the following options'),
-  // avatar: ,
-  agreement: string().required(
-    'To proceed you should be agreed with terms and conditions'
+  avatar: string(),
+  agreement: string().matches(
+      /\bagree\b/i,{message: 'To proceed you should be agreed with terms and conditions'}
   ),
   country: string().required('Please choose the country'),
 });

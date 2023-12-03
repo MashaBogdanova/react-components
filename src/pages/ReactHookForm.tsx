@@ -20,6 +20,7 @@ export default function ReactHookForm() {
 
   const onSubmit: SubmitHandler<IInputs> = (data) => {
     dispatch(setData(data));
+    debugger
     navigate('/');
     dispatch(setDataAdded(true));
     setTimeout(() => {
@@ -80,34 +81,20 @@ export default function ReactHookForm() {
           {errors.gender && errors.gender.message}
         </div>
       </div>
-      {/*<div className={styles.form__fieldset}>*/}
-      {/*  <label>Your avatar</label>*/}
-      {/*  <input*/}
-      {/*    type="file"*/}
-      {/*    {...register('avatar', {*/}
-      {/*      validate: {*/}
-      {/*        extension: (v) =>*/}
-      {/*          v[0].type === 'image/jpeg' ||*/}
-      {/*          v[0].type === 'image/png' ||*/}
-      {/*          'Please upload an image in JPEG or PNG format.',*/}
-      {/*        size: (v) =>*/}
-      {/*          v[0].size <= 1024 * 1024 ||*/}
-      {/*          'Please make sure the image size is within the limit of 1MB.',*/}
-      {/*      },*/}
-      {/*    })}*/}
-      {/*  />*/}
-      {/*  /!*{errors.avatar && errors.avatar.message}*!/*/}
-      {/*</div>*/}
+      <CountryAutocomplete
+        isReactHook
+        register={register}
+        errorMessage={errors.country?.message}
+      />
       <div className={styles.form__block}>
         <div className={styles.form__fieldset}>
           <label>I agree with terms and conditions:</label>
-          <input type="checkbox" {...register('agreement')} />
+          <input type="checkbox" {...register('agreement')} value="agree"/>
         </div>
         <div className={styles.form__error}>
           {errors.agreement && errors.agreement.message}
         </div>
       </div>
-      <CountryAutocomplete isReactHook register={register} errorMessage={errors.country?.message}/>
       <div className={styles.form__fieldset}>
         <input type="submit" />
         <input type="reset" />

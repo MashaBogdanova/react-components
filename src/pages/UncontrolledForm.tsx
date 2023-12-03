@@ -25,7 +25,6 @@ function UncontrolledForm() {
         repeatPassword: formData.get('repeatPassword') as string,
         gender: formData.get('gender') as 'female' | 'male',
         country: formData.get('country') as string,
-        // avatar: formData.get('avatar') as any,
         agreement: formData.get('agreement') as 'agree',
       };
       try {

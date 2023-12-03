@@ -1,23 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useAppSelector } from '../../redux/hooks';
 import styles from '../../pages/Forms.module.css';
-import { IErrors } from '../../types/types';
 
 interface IProps {
-  errors: IErrors;
+  errorMessage?: string;
+  isReactHook?: boolean;
+  register?: any;
 }
 
-const CountryAutocomplete = ({ errors }: IProps) => {
+const CountryAutocomplete = ({
+  errorMessage,
+  isReactHook,
+  register,
+}: IProps) => {
   const countries: string[] = useAppSelector(
     (state) => state.formData.countries
   );
   const [inputValue, setInputValue] = useState<string>('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [isError, setError] = useState<boolean>(!!errors);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setError(false);
     setInputValue(value);
 
     const filteredSuggestions =
@@ -39,13 +42,22 @@ const CountryAutocomplete = ({ errors }: IProps) => {
     <div className={styles.form__block}>
       <div className={styles.form__fieldset}>
         <label htmlFor="country">Country</label>
-        <input
-          type="text"
-          name="country"
-          id="country"
-          value={inputValue}
-          onChange={handleInputChange}
-        />
+        {isReactHook ? (
+          <input
+            {...register('country')}
+            type="text"
+            value={inputValue}
+            onChange={handleInputChange}
+          />
+        ) : (
+          <input
+            type="text"
+            name="country"
+            id="country"
+            value={inputValue}
+            onChange={handleInputChange}
+          />
+        )}
       </div>
       {suggestions.length > 0 && (
         <ul>
@@ -56,9 +68,7 @@ const CountryAutocomplete = ({ errors }: IProps) => {
           ))}
         </ul>
       )}
-      {isError && errors.country && (
-        <div className={styles.form__error}>{errors.country}</div>
-      )}
+      {errorMessage && <div className={styles.form__error}>{errorMessage}</div>}
     </div>
   );
 };

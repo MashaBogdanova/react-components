@@ -3,7 +3,7 @@ import styles from './Forms.module.css';
 import { setData, setDataAdded } from '../redux/formDataSlice';
 import { useAppDispatch } from '../redux/hooks';
 import { useNavigate } from 'react-router-dom';
-import {IErrors, IInputs} from '../types/types';
+import { IErrors, IInputs } from '../types/types';
 import schema from '../validation/formValidation';
 import { ValidationError } from 'yup';
 import CountryAutocomplete from '../components/country-autocomplete/CountryAutocomplete';
@@ -24,7 +24,7 @@ function UncontrolledForm() {
         password: formData.get('password') as string,
         repeatPassword: formData.get('repeatPassword') as string,
         gender: formData.get('gender') as 'female' | 'male',
-        country: formData.get('autocomplete') as string,
+        country: formData.get('country') as string,
         // avatar: formData.get('avatar') as any,
         agreement: formData.get('agreement') as 'agree',
       };
@@ -106,6 +106,7 @@ function UncontrolledForm() {
       {/*  <label htmlFor="avatar">Your avatar</label>*/}
       {/*  <input type="file" id="avatar" />*/}
       {/*</div>*/}
+      <CountryAutocomplete errorMessage={errors.country} />
       <div className={styles.form__block}>
         <div className={styles.form__fieldset}>
           <input
@@ -120,7 +121,6 @@ function UncontrolledForm() {
           <div className={styles.form__error}>{errors.agreement}</div>
         )}
       </div>
-        <CountryAutocomplete errors={errors}/>
       <div className={styles.form__fieldset}>
         <button type="submit">Submit</button>
         <button type="reset">Reset</button>

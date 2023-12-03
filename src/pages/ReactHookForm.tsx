@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { IInputs } from '../types/types';
 import schema from '../validation/formValidation';
 import { yupResolver } from '@hookform/resolvers/yup';
-import CountryAutocomplete from "../components/country-autocomplete/CountryAutocomplete";
+import CountryAutocomplete from '../components/country-autocomplete/CountryAutocomplete';
 
 export default function ReactHookForm() {
   const {
@@ -107,7 +107,7 @@ export default function ReactHookForm() {
           {errors.agreement && errors.agreement.message}
         </div>
       </div>
-      <input {...register('country')} />
+      <CountryAutocomplete isReactHook register={register} errorMessage={errors.country?.message}/>
       <div className={styles.form__fieldset}>
         <input type="submit" />
         <input type="reset" />

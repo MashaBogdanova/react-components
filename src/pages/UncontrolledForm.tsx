@@ -3,13 +3,10 @@ import styles from './Forms.module.css';
 import { setData, setDataAdded } from '../redux/formDataSlice';
 import { useAppDispatch } from '../redux/hooks';
 import { useNavigate } from 'react-router-dom';
-import { IInputs } from '../types/types';
+import {IErrors, IInputs} from '../types/types';
 import schema from '../validation/formValidation';
 import { ValidationError } from 'yup';
-
-interface IErrors {
-  [key: string]: string;
-}
+import CountryAutocomplete from '../components/country-autocomplete/CountryAutocomplete';
 
 function UncontrolledForm() {
   const [errors, setErrors] = useState<IErrors>({});
@@ -27,6 +24,7 @@ function UncontrolledForm() {
         password: formData.get('password') as string,
         repeatPassword: formData.get('repeatPassword') as string,
         gender: formData.get('gender') as 'female' | 'male',
+        country: formData.get('autocomplete') as string,
         // avatar: formData.get('avatar') as any,
         agreement: formData.get('agreement') as 'agree',
       };
@@ -56,6 +54,7 @@ function UncontrolledForm() {
 
   return (
     <form onSubmit={handleSubmit} ref={formRef} className={styles.form}>
+      <h1>Uncontrolled Form</h1>
       <div className={styles.form__block}>
         <div className={styles.form__fieldset}>
           <label htmlFor="name">Your name</label>
@@ -77,6 +76,7 @@ function UncontrolledForm() {
           <div className={styles.form__error}>{errors.email}</div>
         )}
       </div>
+
       <div className={styles.form__block}>
         <div className={styles.form__fieldset}>
           <label htmlFor="password">Password</label>
@@ -120,6 +120,7 @@ function UncontrolledForm() {
           <div className={styles.form__error}>{errors.agreement}</div>
         )}
       </div>
+        <CountryAutocomplete errors={errors}/>
       <div className={styles.form__fieldset}>
         <button type="submit">Submit</button>
         <button type="reset">Reset</button>

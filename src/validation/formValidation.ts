@@ -34,6 +34,7 @@ const schema = object().shape({
   agreement: string().required(
     'To proceed you should be agreed with terms and conditions'
   ),
+    country: string().required('Please choose the country')
 });
 
 export default schema;

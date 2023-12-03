@@ -5,6 +5,8 @@
   gap: 1em;
 }
 .form__block {
+  display: flex;
+  flex-direction: column;
   border: 1px dotted #9a9a9a;
   padding: 1em;
 }

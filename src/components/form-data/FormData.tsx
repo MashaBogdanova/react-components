@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAppSelector } from '../redux/hooks';
+import { useAppSelector } from '../../redux/hooks';
 import styles from './FormData.module.css';
 
 function FormData() {
@@ -10,7 +10,10 @@ function FormData() {
   ) : (
     formData.map((data, index) => {
       return (
-        <ul key={data?.name} className={index === 0 ? styles.data_lastItem : ''}>
+        <ul
+          key={data?.name}
+          className={index === 0 ? styles.data_lastItem : ''}
+        >
           <li>Name: {data?.name}</li>
           <li>Age: {data?.age}</li>
           <li>Password: {data?.password}</li>

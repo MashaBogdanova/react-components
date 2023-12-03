@@ -1,9 +1,9 @@
 import './App.css';
 import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
-import FormData from './pages/FormData';
+import FormData from './components/form-data/FormData';
 import { useAppSelector } from './redux/hooks';
-import DataNotification from './components/DataNotification';
+import DataNotification from './components/data-notification/DataNotification';
 
 function App() {
   const navigate = useNavigate();

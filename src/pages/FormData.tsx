@@ -1,9 +1,13 @@
 import React from 'react';
 import { useAppSelector } from '../redux/hooks';
 
-function FormData() {
-  const formData = useAppSelector((state) => state.formData.RHFData);
+function FormData({ isRHF }: { isRHF?: boolean }) {
+  const formData = useAppSelector((state) =>
+    isRHF ? state.formData.RHFData : state.formData.data
+  );
+  const file = formData?.avatar;
   console.log(formData);
+
   return formData === null ? (
     <p>No data available at the moment</p>
   ) : (
@@ -13,9 +17,9 @@ function FormData() {
       <li>E-mail: {formData?.email}</li>
       <li>Password: {formData?.password}</li>
       <li>Gender: {formData?.gender}</li>
-      <li>
-        Avatar: <img src={formData?.avatar} />
-      </li>
+
+
+        {/*{file}*/}
     </ul>
   );
 }

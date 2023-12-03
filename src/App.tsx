@@ -43,7 +43,7 @@ function App() {
               Show data
             </button>
           )}
-          {isRHFData && <FormData />}
+          {isRHFData && <FormData isRHF />}
         </article>
       </section>
     </main>

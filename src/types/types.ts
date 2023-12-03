@@ -4,7 +4,6 @@ export interface IInputs {
   email: string;
   password: string;
   repeatPassword: string;
-  gender: 'female' | 'male';
-  avatar?: any;
-  agreement: 'agree';
+  gender: string;
+  agreement: string;
 }

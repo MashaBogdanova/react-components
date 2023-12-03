@@ -16,7 +16,9 @@ const formDataSlice = createSlice({
   initialState,
   reducers: {
     setData: (state, action) => {
-      state.data ? state.data.unshift(action.payload) : state.data = [action.payload];
+      state.data
+        ? state.data.unshift(action.payload)
+        : (state.data = [action.payload]);
     },
     setDataAdded: (state, action) => {
       state.wasDataAdded = action.payload;

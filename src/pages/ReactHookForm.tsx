@@ -4,6 +4,8 @@ import { setData, setDataAdded } from '../redux/formDataSlice';
 import { useAppDispatch } from '../redux/hooks';
 import { useNavigate } from 'react-router-dom';
 import { IInputs } from '../types/types';
+import schema from '../validation/formValidation';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 export default function ReactHookForm() {
   const {
@@ -11,7 +13,7 @@ export default function ReactHookForm() {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<IInputs>();
+  } = useForm({ resolver: yupResolver(schema) });
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -26,88 +28,57 @@ export default function ReactHookForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-      <fieldset className={styles.form__fieldset}>
-        <label>Your name</label>
-        <input
-          {...register('name', {
-            pattern: {
-              value: /^[A-Z].*$/,
-              message:
-                'Name should begins with a capital letter. Please enter a valid name accordingly.',
-            },
-          })}
-        />
-        {errors.name && errors.name.message}
+      <div className={styles.form__block}>
+        <div className={styles.form__fieldset}>
+          <label>Your name</label>
+          <input {...register('name')} />
 
-        <label>Your age</label>
-        <input
-          type="number"
-          {...register('age', {
-            valueAsNumber: true,
-            validate: {
-              positive: (v) =>
-                v > 0 ||
-                'Age should be greater than 0. Please enter a valid age accordingly',
-              integer: (v) =>
-                Number.isInteger(v) ||
-                'Age should be an integer. Please enter a valid age accordingly',
-            },
-          })}
-        />
-        {errors.age && errors.age.message}
-      </fieldset>
+          <label>Your age</label>
+          <input type="number" {...register('age')} />
+        </div>
+        <div className={styles.form__error}>
+          {errors.name && errors.name.message}
+        </div>
+        <div className={styles.form__error}>
+          {errors.age && errors.age.message}
+        </div>
+      </div>
+      <div className={styles.form__block}>
+        <div className={styles.form__fieldset}>
+          <label>E-mail</label>
+          <input {...register('email')} />
+        </div>
+        <div className={styles.form__error}>
+          {errors.email && errors.email.message}
+        </div>
+      </div>
+      <div className={styles.form__block}>
+        <div className={styles.form__fieldset}>
+          <label>Password</label>
+          <input {...register('password')} />
 
-      <fieldset className={styles.form__fieldset}>
-        <label>E-mail</label>
-        <input
-          {...register('email', {
-            pattern: {
-              value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-              message:
-                'Please enter a valid email address. Ensure it follows the standard format, such as user@example.com.',
-            },
-          })}
-        />
-        {errors.email && errors.email.message}
-      </fieldset>
-
-      <fieldset className={styles.form__fieldset}>
-        <label>Password</label>
-        <input
-          {...register('password', {
-            pattern: {
-              value:
-                /^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*()_+])[0-9A-Za-z!@#$%^&*()_+]+$/,
-              message:
-                'Please enter a valid Password. Ensure it contains 1 number, 1 uppercased letter, 1 lowercased letter, 1 special character.',
-            },
-          })}
-        />
-        {errors.password && errors.password.message}
-
-        <label>Repeat password</label>
-        <input
-          {...register('repeatPassword', {
-            pattern: {
-              value:
-                /^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*()_+])[0-9A-Za-z!@#$%^&*()_+]+$/,
-              message:
-                'Please enter a valid Password. Ensure it contains 1 number, 1 uppercased letter, 1 lowercased letter, 1 special character.',
-            },
-            validate: (v) =>
-              v === watch('password') ||
-              'Passwords do not match. Please ensure that the entered passwords match exactly.',
-          })}
-        />
-        {errors.repeatPassword && errors.repeatPassword.message}
-      </fieldset>
-      <fieldset className={styles.form__fieldset}>
-        <label>Female</label>
-        <input type="radio" value="female" {...register('gender')} />
-        <label>Male</label>
-        <input type="radio" value="male" {...register('gender')} />
-      </fieldset>
-      {/*<fieldset className={styles.form__fieldset}>*/}
+          <label>Repeat password</label>
+          <input {...register('repeatPassword')} />
+        </div>
+        <div className={styles.form__error}>
+          {errors.password && errors.password.message}
+        </div>
+        <div className={styles.form__error}>
+          {errors.repeatPassword && errors.repeatPassword.message}
+        </div>
+      </div>
+      <div className={styles.form__block}>
+        <div className={styles.form__fieldset}>
+          <label>Female</label>
+          <input type="radio" value="female" {...register('gender')} />
+          <label>Male</label>
+          <input type="radio" value="male" {...register('gender')} />
+        </div>
+        <div className={styles.form__error}>
+          {errors.gender && errors.gender.message}
+        </div>
+      </div>
+      {/*<div className={styles.form__fieldset}>*/}
       {/*  <label>Your avatar</label>*/}
       {/*  <input*/}
       {/*    type="file"*/}
@@ -124,16 +95,20 @@ export default function ReactHookForm() {
       {/*    })}*/}
       {/*  />*/}
       {/*  /!*{errors.avatar && errors.avatar.message}*!/*/}
-      {/*</fieldset>*/}
-      <fieldset className={styles.form__fieldset}>
-        <label>I agree with terms and conditions:</label>
-        <input type="checkbox" {...register('agreement', { required: true })} />
-        {errors.agreement && <span>This field is required.</span>}
-      </fieldset>
-      <fieldset className={styles.form__fieldset}>
+      {/*</div>*/}
+      <div className={styles.form__block}>
+        <div className={styles.form__fieldset}>
+          <label>I agree with terms and conditions:</label>
+          <input type="checkbox" {...register('agreement')} />
+        </div>
+        <div className={styles.form__error}>
+          {errors.agreement && errors.agreement.message}
+        </div>
+      </div>
+      <div className={styles.form__fieldset}>
         <input type="submit" />
         <input type="reset" />
-      </fieldset>
+      </div>
     </form>
   );
 }

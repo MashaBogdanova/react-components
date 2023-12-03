@@ -10,7 +10,7 @@ function FormData() {
   ) : (
     formData.map((data, index) => {
       return (
-        <ul className={index === 0 ? styles.data_lastItem : ''}>
+        <ul key={data?.name} className={index === 0 ? styles.data_lastItem : ''}>
           <li>Name: {data?.name}</li>
           <li>Age: {data?.age}</li>
           <li>Password: {data?.password}</li>

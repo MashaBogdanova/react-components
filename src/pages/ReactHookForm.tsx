@@ -1,6 +1,6 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import styles from './Forms.module.css';
-import { setDataAdded, setRHFData } from '../redux/formDataSlice';
+import { setData, setDataAdded } from '../redux/formDataSlice';
 import { useAppDispatch } from '../redux/hooks';
 import { useNavigate } from 'react-router-dom';
 import { IInputs } from '../types/types';
@@ -16,9 +16,7 @@ export default function ReactHookForm() {
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<IInputs> = (data) => {
-    console.log(data);
-    // const formData = { ...data, avatar: data.avatar[0] };
-    dispatch(setRHFData(data));
+    dispatch(setData(data));
     navigate('/');
     dispatch(setDataAdded(true));
     setTimeout(() => {

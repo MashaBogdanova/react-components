@@ -3,13 +3,11 @@ import { IInputs } from '../types/types';
 
 interface IInitialState {
   data: IInputs[] | null;
-  RHFData: IInputs[] | null;
   wasDataAdded: boolean;
 }
 
 const initialState: IInitialState = {
   data: null,
-  RHFData: null,
   wasDataAdded: false,
 };
 
@@ -18,10 +16,7 @@ const formDataSlice = createSlice({
   initialState,
   reducers: {
     setData: (state, action) => {
-      state.data?.push(action.payload);
-    },
-    setRHFData: (state, action) => {
-      state.RHFData?.push(action.payload);
+      state.data ? state.data.unshift(action.payload) : state.data = [action.payload];
     },
     setDataAdded: (state, action) => {
       state.wasDataAdded = action.payload;
@@ -29,5 +24,5 @@ const formDataSlice = createSlice({
   },
 });
 
-export const { setData, setRHFData, setDataAdded } = formDataSlice.actions;
+export const { setData, setDataAdded } = formDataSlice.actions;
 export default formDataSlice.reducer;

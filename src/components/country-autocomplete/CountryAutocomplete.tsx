@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useAppSelector } from '../../redux/hooks';
 import styles from '../../pages/Forms.module.css';
+import { UseFormRegister } from 'react-hook-form/dist/types/form';
+import { IInputs } from '../../types/types';
 
 interface IProps {
   errorMessage?: string;
   isReactHook?: boolean;
-  register?: any;
+  register?: UseFormRegister<IInputs>;
 }
 
 const CountryAutocomplete = ({
@@ -44,7 +46,7 @@ const CountryAutocomplete = ({
         <label htmlFor="country">Country</label>
         {isReactHook ? (
           <input
-            {...register('country')}
+            {...register!('country')}
             type="text"
             value={inputValue}
             onChange={handleInputChange}

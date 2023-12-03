@@ -20,7 +20,6 @@ export default function ReactHookForm() {
 
   const onSubmit: SubmitHandler<IInputs> = (data) => {
     dispatch(setData(data));
-    debugger
     navigate('/');
     dispatch(setDataAdded(true));
     setTimeout(() => {
@@ -89,7 +88,7 @@ export default function ReactHookForm() {
       <div className={styles.form__block}>
         <div className={styles.form__fieldset}>
           <label>I agree with terms and conditions:</label>
-          <input type="checkbox" {...register('agreement')} value="agree"/>
+          <input type="checkbox" {...register('agreement')} value="agree" />
         </div>
         <div className={styles.form__error}>
           {errors.agreement && errors.agreement.message}

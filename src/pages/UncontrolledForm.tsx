@@ -101,10 +101,6 @@ function UncontrolledForm() {
           <div className={styles.form__error}>{errors.gender}</div>
         )}
       </div>
-      {/*<div className={styles.form__fieldset}>*/}
-      {/*  <label htmlFor="avatar">Your avatar</label>*/}
-      {/*  <input type="file" id="avatar" />*/}
-      {/*</div>*/}
       <CountryAutocomplete errorMessage={errors.country} />
       <div className={styles.form__block}>
         <div className={styles.form__fieldset}>

@@ -6,8 +6,7 @@ export interface IInputs {
   repeatPassword: string;
   gender: string;
   country: string;
-  agreement: string;
-  avatar?: string;
+  agreement?: string | undefined;
 }
 
 export interface IErrors {
